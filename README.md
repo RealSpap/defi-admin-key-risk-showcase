@@ -4,7 +4,7 @@
 ![Status](https://img.shields.io/badge/status-active%20research-brightgreen)
 ![Follow](https://img.shields.io/badge/follow-%40RealSpap-000000?logo=x)
 
-**The headline finding:** across 70+ DeFi protocols checked directly on-chain, several are still one compromised key away from repeating Wasabi Protocol's $5.9M loss — including a single bare EOA holding real upgrade power over $3.84M+ at cVault Finance/CORE, and $750K at Smilee Finance's gBERA behind 4 unthresholded admin-role holders. [Full findings below](#what-it-found-checked-by-hand) · [Live dashboard](https://dune.com/s_pap/defi-admin-key-risk) · [Contact for licensing / custom research](https://x.com/RealSpap)
+**The headline finding:** across 70+ DeFi protocols checked directly on-chain, several are still one compromised key away from repeating Wasabi Protocol's $5.9M loss, including a single bare EOA holding real upgrade power over $3.84M+ at cVault Finance/CORE, and $750K at Smilee Finance's gBERA behind 4 unthresholded admin-role holders. [Full findings below](#what-it-found-checked-by-hand) · [Live dashboard](https://dune.com/s_pap/defi-admin-key-risk) · [Contact for licensing / custom research](https://x.com/RealSpap)
 
 Independent, on-chain verified research into who really holds the upgrade/admin keys behind live DeFi protocols, anchored on a real 2026 incident, plus a check that finds the same pattern elsewhere.
 
@@ -96,6 +96,8 @@ All four were pushed to a real dollar figure, or to a documented reason one cann
 For contrast, and because most protocols checked were fine: RAAC, Compound V2, Cap (3-of-5 Safe behind a 24h Timelock, full chain traced), Frankencoin (fully immutable), Twyne, LandX Finance, Notional V2 (2-of-7 Safe), Threshold thUSD (48h Timelock), Inverse Finance Frontier (48h Timelock behind full governance), UniverseXYZ (DAO governance), Origin Dollar (48h Timelock), and cVault Finance's own DELTA Multisig.
 
 The second pass added many more: Easedefi.org (fully renounced), FIAT DAO (fully renounced), Yala, Bio Protocol, Asymmetry Finance, DeFi Franc, BOB Fusion, Metronome V1, Frax FPI, Lybra V2, Blur Lending and Resolv USR (each a genuine multi-signer Safe with a real threshold), Nsure Network and OPINION (3-of-5 Safes), Gro DAO (3-of-7), Goldfinch, mStable, and Puffer UniFi (renounced). Larger, more established names checked along the way, Compound V1, Uniswap V1, Augur, Keep3r Network, 1inch, GMX V1, NFTX, Gnosis Protocol v1, Synthetix V4, were consistently fine, reinforcing the pattern below rather than adding new findings.
+
+A third pass added Ethena's USDe, and caught a real secondary-source trap along the way. A generic search for "EthenaMinting owner" turns up an address Ethena's own docs page lists, but calling `owner()` directly against the live EthenaMinting V2 contract and the USDe token itself returns a different address, confirmed to be an OpenZeppelin `TimelockController` with a 24-hour `getMinDelay()`, not the docs-page address at all. The older EthenaMinting V1 contract's `owner()` resolves to yet a third address, a genuine 5-of-10 Gnosis Safe. Read in order: V1 (likely legacy) sits behind a 5-of-10 multisig, V2 and the token itself, the two contracts that actually matter today, sit behind a 24-hour timelock. Whatever the docs-page address is for, it isn't the current live admin of either.
 
 ## The pattern
 
