@@ -118,4 +118,4 @@ This is independent research, not an audit or a security guarantee. Everything a
 
 ## License
 
-All rights reserved. This repository documents the method and results; the tool itself is available under a commercial license, see above.
+All rights reserved. This repository documents the results; the tool itself is available under a commercial license, see above.
