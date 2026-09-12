@@ -41,7 +41,7 @@ Compromised admin/deployer keys have overtaken smart-contract bugs as the #1 cau
 
 ## Access to the tool
 
-The verification method behind this research runs on demand, replayed fresh against any protocol you name, not published in this repository. Every case above was checked days or weeks ago; run the same check again today and the answer can change, because admin keys get rotated, renounced, or compromised on-chain, not because the method has gone stale. Want to know where your own protocol lands on this list? Reach out via [RealSpap on X](https://x.com/RealSpap) to have it checked live this week.
+The verification method behind this research runs on demand, replayed fresh against any protocol you name, not published in this repository. Every case above was checked days or weeks ago; run the same check again today and the answer can change, because admin keys get rotated, renounced, or compromised on-chain, not because the method has gone stale. Want to check one yourself right now, free? [Admin Key Checker](https://realspap.github.io/tools/admin-key-checker.html) classifies any contract's admin-key pattern live from chain, in your browser, no account needed. For the full method, dollar-figure decomposition, and a check against documented third-party targeting, reach out via [RealSpap on X](https://x.com/RealSpap) to have it checked live this week.
 
 ## Disclaimer
 
