@@ -2,6 +2,7 @@
 
 ![License](https://img.shields.io/badge/license-all%20rights%20reserved-blue)
 ![Status](https://img.shields.io/badge/status-active%20research-brightgreen)
+[![Check a contract: free tool](https://img.shields.io/badge/check%20a%20contract-free%20tool-orange)](https://realspap.github.io/tools/admin-key-checker.html)
 ![Follow](https://img.shields.io/badge/follow-%40RealSpap-000000?logo=x)
 
 **The headline finding:** across 70+ DeFi protocols checked directly on-chain, several are still one compromised key away from repeating Wasabi Protocol's $5.9M loss, including a single bare EOA holding real upgrade power over $3.84M+ at cVault Finance/CORE, and $750K at Smilee Finance's gBERA behind 4 unthresholded admin-role holders. [Full findings below](#what-it-found-checked-by-hand) · [Live dashboard](https://dune.com/s_pap/defi-admin-key-risk) · [Contact for licensing / custom research](https://x.com/RealSpap)
@@ -151,7 +152,7 @@ The $5M-$20M TVL band has come back consistently clean three separate times now.
 
 ## About
 
-Part of an ongoing program of independent on-chain research, same discipline throughout: primary-source anchors, on-chain reconstruction, corrections issued openly when something's found wrong. Related work: [multisig-overlap](https://github.com/RealSpap/multisig-overlap-showcase) (341 protocols screened for shared multisig signers), [block-market-concentration](https://github.com/RealSpap/block-market-concentration-showcase) (who really builds and profits from Ethereum's blocks), and [onchain-postmortems](https://github.com/RealSpap/onchain-postmortems) (35 DeFi exploits independently reconstructed). Every pass across this program has found something real; none has come back empty. Ongoing work and dashboards: [Dune](https://dune.com/s_pap), [X](https://x.com/RealSpap).
+Part of an ongoing program of independent on-chain research, same discipline throughout: primary-source anchors, on-chain reconstruction, corrections issued openly when something's found wrong. Related work: [multisig-overlap](https://github.com/RealSpap/multisig-overlap-showcase) (341 protocols screened for shared multisig signers), [block-market-concentration](https://github.com/RealSpap/block-market-concentration-showcase) (who really builds and profits from Ethereum's blocks), and [onchain-postmortems](https://github.com/RealSpap/onchain-postmortems) (40 DeFi exploits independently reconstructed, ~$783.7M recomputed). Every pass across this program has found something real; none has come back empty. Ongoing work and dashboards: [Dune](https://dune.com/s_pap), [X](https://x.com/RealSpap).
 
 ## License
 
