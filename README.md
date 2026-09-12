@@ -29,7 +29,7 @@ Severity is not a code-bug scale, so the usual Critical/High/Medium/Low vocabula
 | MiniSwap | Bare EOA, dormant | ~$277.41 (pool liquidity) | Low |
 | Mars Poolin | Bare EOA, dormant | ~$0.10 (pool liquidity) | Low |
 
-By severity: 2 Critical, 4 High, 2 Medium, 4 Low, across the 12 cases above.
+By severity: 2 Critical, 4 High, 2 Medium, 4 Low, across the 12 cases above. cVault Finance/CORE and Fake World Assets currently share the top spot: both Critical, both under documented active targeting right now, not just theoretically exposed.
 
 A few of these calls are not obvious from the numbers alone. cVault Finance/CORE and FWA are Critical rather than High because both keys show documented evidence of third-party targeting, Fake_Phishing-tagged transfers and address poisoning for cVault, Fake_Phishing-tagged incoming transfers for FWA, on top of being demonstrably active; the call has nothing to do with the dollar amount. Aurus is High rather than Critical for the opposite reason its own Owner Mint transactions look alarming at first glance: those mints were executed by the same team's own key, with no evidence anyone outside the project has targeted it, so it reads as ordinary (if dangerously centralized) operation rather than exploitation. DELTA LSW and JayPeggers are Medium despite belonging to active, real keys because their practical reach is capped: DELTA LSW's balance is small and untouched since 2022, and JayPeggers' owner can only redirect a bounded fee, not sweep the ETH balance. APY Finance is High rather than Critical because any one of six signers can already act alone and the Safe custodies real value directly, but no targeting of a specific signer has been documented.
 
@@ -41,7 +41,7 @@ Compromised admin/deployer keys have overtaken smart-contract bugs as the #1 cau
 
 ## Access to the tool
 
-The verification method behind this research is available under a commercial license, not published in this repository. The findings below were produced with it and are independently reproducible by anyone with the same access; this repo documents the results, not the mechanism. Reach out via [RealSpap on X](https://x.com/RealSpap) for licensing.
+The verification method behind this research runs on demand, replayed fresh against any protocol you name, not published in this repository. Every case above was checked days or weeks ago; run the same check again today and the answer can change, because admin keys get rotated, renounced, or compromised on-chain, not because the method has gone stale. Want to know where your own protocol lands on this list? Reach out via [RealSpap on X](https://x.com/RealSpap) to have it checked live this week.
 
 ## Disclaimer
 
@@ -144,6 +144,14 @@ This is a first-pass filter plus manual verification, not an audit. A few things
 - The tool only recognizes standard `Ownable`/`AccessControl`/Gnosis Safe patterns. A protocol that rolls its own bespoke access control (as Wasabi itself did) needs the source read by hand.
 
 This is independent research, not an audit or a security guarantee. Everything above is stated at the confidence level the on-chain data actually supports.
+
+## What's still open
+
+The $5M-$20M TVL band has come back consistently clean three separate times now. The next honest test of that pattern is the $20M-$100M band, not yet checked here, one tier up from everything tested so far.
+
+## About
+
+Part of an ongoing program of independent on-chain research, same discipline throughout: primary-source anchors, on-chain reconstruction, corrections issued openly when something's found wrong. Related work: [multisig-overlap](https://github.com/RealSpap/multisig-overlap-showcase) (341 protocols screened for shared multisig signers), [block-market-concentration](https://github.com/RealSpap/block-market-concentration-showcase) (who really builds and profits from Ethereum's blocks), and [onchain-postmortems](https://github.com/RealSpap/onchain-postmortems) (35 DeFi exploits independently reconstructed). Every pass across this program has found something real; none has come back empty. Ongoing work and dashboards: [Dune](https://dune.com/s_pap), [X](https://x.com/RealSpap).
 
 ## License
 
