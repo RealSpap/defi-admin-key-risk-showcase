@@ -8,6 +8,31 @@
 
 Independent, on-chain verified research into who really holds the upgrade/admin keys behind live DeFi protocols, anchored on a real 2026 incident, plus a check that finds the same pattern elsewhere.
 
+## At a glance
+
+Every case below is described in full, with sources, in [What it found, checked by hand](#what-it-found-checked-by-hand). Defect types build on the categories defined in [Method](#method), with a short qualifier added where the case itself has one (a wrapper contract, a dormant key). Every dollar figure here is copied as-is from that section; nothing here is a new calculation.
+
+Severity is not a code-bug scale, so the usual Critical/High/Medium/Low vocabulary is adapted to what actually matters for an admin key: **Critical** = the key is demonstrably active and there is documented evidence that a third party has actively targeted it (phishing-tagged incoming transfers, address poisoning, or an unauthorized/malicious mint), not merely that the key has been used. **High** = the key is demonstrably active and holds real, undiminished power, but no third-party targeting has been documented; ordinary use by the project's own team, however risky the setup, falls here rather than Critical. **Medium** = the key or role is real but its practical reach is limited, either by a small amount at stake or by narrow on-chain powers (a bounded fee redirect rather than a full sweep). **Low** = the key has been dormant for years, or the amount at stake is negligible.
+
+| Protocol | Defect type | Amount at risk | Severity |
+|---|---|---|---|
+| Aurus (TXAU/TXAG/TXPT) | Bare EOA | ~$900K (real market cap) | High |
+| cVault Finance / CORE | Bare EOA | $3.84M+ | Critical |
+| Smilee Finance / gBERA | AccessControl, multi-holder, no threshold | ~$750K | High |
+| DELTA LSW (cVault legacy) | Bare EOA (via wrapper contract) | ~$36K | Medium |
+| Fake World Assets / FWA | Bare EOA | No dollar figure (risk is future proceeds routing, not funds already parked; the contract itself holds ~$160) | Critical |
+| UwU Lend | Bare EOA | $48,000 to $62,000 | High |
+| JayPeggers | Bare EOA | ~$188,460 | Medium |
+| APY Finance | 1-of-N Safe | ~$51,300 (of which ~$18,500 sits directly in the Safe) | High |
+| DeFIL | Bare EOA, dormant | No dollar figure | Low |
+| ChickenSwap | Bare EOA, dormant | ~$150.57 (pool liquidity) | Low |
+| MiniSwap | Bare EOA, dormant | ~$277.41 (pool liquidity) | Low |
+| Mars Poolin | Bare EOA, dormant | ~$0.10 (pool liquidity) | Low |
+
+By severity: 2 Critical, 4 High, 2 Medium, 4 Low, across the 12 cases above.
+
+A few of these calls are not obvious from the numbers alone. cVault Finance/CORE and FWA are Critical rather than High because both keys show documented evidence of third-party targeting, Fake_Phishing-tagged transfers and address poisoning for cVault, Fake_Phishing-tagged incoming transfers for FWA, on top of being demonstrably active; the call has nothing to do with the dollar amount. Aurus is High rather than Critical for the opposite reason its own Owner Mint transactions look alarming at first glance: those mints were executed by the same team's own key, with no evidence anyone outside the project has targeted it, so it reads as ordinary (if dangerously centralized) operation rather than exploitation. DELTA LSW and JayPeggers are Medium despite belonging to active, real keys because their practical reach is capped: DELTA LSW's balance is small and untouched since 2022, and JayPeggers' owner can only redirect a bounded fee, not sweep the ETH balance. APY Finance is High rather than Critical because any one of six signers can already act alone and the Safe custodies real value directly, but no targeting of a specific signer has been documented.
+
 ## What happened
 
 On 2026-04-30, Wasabi Protocol lost ~$5.9M across Ethereum, Base, Berachain and Blast after an attacker compromised the private key of `wasabideployer.eth`. That single key held unchecked admin authority over every one of Wasabi's upgradeable vaults, with no multisig and no timelock. The protocol's own framework supported a timelock; it was just set to 0.
