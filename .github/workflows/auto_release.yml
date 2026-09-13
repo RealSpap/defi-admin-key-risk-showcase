@@ -36,10 +36,10 @@ jobs:
             SKIP=true
           fi
 
-          # Other bot/state-only commit shapes, matching the pattern
-          # already proven on RealSpap/multisig-overlap and
-          # RealSpap/onchain-postmortems (e.g. "chore(monitor): update
-          # signer-monitor state").
+          # Other bot/state-only commit shapes, matching conventional
+          # commit prefixes used by automated maintenance bots across
+          # this research pipeline (e.g. "chore(monitor): update bot
+          # state").
           if printf '%s' "$SUBJECT" | grep -Eqi '^(chore|ci|bot|build)(\([^)]*\))?:.*(badge|sync|monitor|signer|heartbeat|state|status)'; then
             SKIP=true
           fi
