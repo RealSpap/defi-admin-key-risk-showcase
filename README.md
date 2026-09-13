@@ -11,6 +11,9 @@
 
 Independent, on-chain verified research into who really holds the upgrade/admin keys behind live DeFi protocols, anchored on a real 2026 incident, plus a check that finds the same pattern elsewhere.
 
+[![Dashboard preview](assets/dashboard-preview.png)](https://dune.com/s_pap/defi-admin-key-risk)
+Live dashboard: click through for the interactive version.
+
 ## At a glance
 
 Every case below is described in full, with sources, in [What it found, checked by hand](#what-it-found-checked-by-hand). Defect types build on the categories defined in [Method](#method), with a short qualifier added where the case itself has one (a wrapper contract, a dormant key). Every dollar figure here is copied as-is from that section; nothing here is a new calculation.
