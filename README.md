@@ -37,12 +37,7 @@ Severity is not a code-bug scale, so the usual Critical/High/Medium/Low vocabula
 
 By severity: 2 Critical, 4 High, 2 Medium, 4 Low, across the 12 cases above. cVault Finance/CORE and Fake World Assets currently share the top spot: both Critical, both under documented active targeting right now, not just theoretically exposed.
 
-A few of these calls are not obvious from the numbers alone:
-
-- **cVault Finance/CORE and FWA (Critical, not just High):** both keys show documented third-party targeting (Fake_Phishing-tagged transfers and address poisoning for cVault, Fake_Phishing-tagged incoming transfers for FWA) on top of being demonstrably active. The call has nothing to do with the dollar amount.
-- **Aurus (High, not Critical):** its Owner Mint transactions look alarming at first glance, but they were executed by the team's own key, with no evidence anyone outside the project has targeted it. Dangerously centralized, but ordinary operation, not exploitation.
-- **DELTA LSW and JayPeggers (Medium despite active, real keys):** their practical reach is capped. DELTA LSW's balance is small and untouched since 2022; JayPeggers' owner can only redirect a bounded fee, not sweep the ETH balance.
-- **APY Finance (High, not Critical):** any one of six signers can already act alone and the Safe custodies real value directly, but no targeting of a specific signer has been documented.
+A few of these severity calls (Aurus, cVault Finance/CORE and FWA, DELTA LSW and JayPeggers, APY Finance) are not obvious from the number alone; see each case's own section below for the reasoning.
 
 ## What happened
 
@@ -52,13 +47,11 @@ Compromised admin/deployer keys have overtaken smart-contract bugs as the #1 cau
 
 ## Access to the tool
 
-The verification method behind this research runs on demand, replayed fresh against any protocol you name, not published in this repository. Every case above was checked days or weeks ago; run the same check again today and the answer can change, because admin keys get rotated, renounced, or compromised on-chain, not because the method has gone stale. Want to check one yourself right now, free? [Admin Key Checker](https://realspap.github.io/tools/admin-key-checker.html) classifies any contract's admin-key pattern live from chain, in your browser, no account needed. For the full method, dollar-figure decomposition, and a check against documented third-party targeting, reach out via [RealSpap on X](https://x.com/RealSpap) to have it checked live this week.
+The verification method behind this research runs on demand, replayed fresh against any protocol you name, not published in this repository, so a case checked days or weeks ago can read differently today: admin keys get rotated, renounced, or compromised on-chain, not because the method has gone stale. Want to check one yourself right now, free? [Admin Key Checker](https://realspap.github.io/tools/admin-key-checker.html) classifies any contract's admin-key pattern live from chain, in your browser, no account needed. For the full method, dollar-figure decomposition, and a check against documented third-party targeting, reach out via [RealSpap on X](https://x.com/RealSpap) to have it checked live this week.
 
 ## Disclaimer
 
-This report presents an independent, factual analysis of publicly available on-chain data (smart contract code, multisig signer sets, governance transactions) as of the date noted in Status above. Statements about which addresses or individuals hold administrative, multisig, or governance keys are based solely on on-chain records and publicly disclosed information cited inline; they are not allegations of wrongdoing, and no claim of illegal conduct, fraud, or misconduct is made or implied. Concentration of control or key-holder identity is reported as an observed structural fact, not as a moral or legal judgment on the individuals named. Findings reflect a snapshot in time; on-chain configurations, signer sets, and governance parameters can and do change after publication, and this report is not updated automatically to reflect such changes. This is independent research, not commissioned or audited by the protocols discussed, and it does not constitute legal, financial, or investment advice. Any individual or entity named in this report who believes information about them is inaccurate or outdated is invited to contact the author via [X](https://x.com/RealSpap) with supporting evidence; corrections will be issued promptly and transparently. Readers should independently verify all cited addresses, transactions, and figures before relying on them.
-
-**Disclosure:** none of the protocols named above were contacted prior to publication. Every finding rests solely on public on-chain data (contract calls and transaction history), not private communication. Any team that wants to respond, or has already remediated a finding, is invited to contact the author via [X](https://x.com/RealSpap); corrections and updates will be issued promptly.
+This research analyzes publicly available on-chain data specific to admin-key risk (smart contract code, multisig signer sets, governance transactions). None of the protocols named above were contacted prior to publication; every finding rests solely on that public on-chain data, not private communication. Full disclaimer, licensing, and program-wide notes: [methodology](https://realspap.github.io/methodology.html).
 
 ## Method
 
@@ -103,7 +96,7 @@ Decomposed rather than quoted from DefiLlama's dashboard: GBeraAssetManager (`0x
 | **The rest (~4.10M WBERA)** | not missing or fabricated: disassembling the proxy's bytecode shows it calling Berachain's own canonical validator deposit contract (`depositContract()` resolves to `0x4242...4242`, the chain's `BeaconDepositContract`) plus validator-commission and node-data functions, meaning it's real value actively staked with validators under this manager's direction, not idle tokens in one wallet |
 | **Access control** | sits behind the same 4-holder `AccessControl` set described above |
 
-This independently confirms, rather than just repeats, the DefiLlama TVL number this section used to cite. Small TVL, exactly the range where this kind of gap tends to survive unnoticed.
+Small TVL, exactly the range where this kind of gap tends to survive unnoticed.
 
 ### DELTA LSW: the one loose end from the first pass, now closed
 
@@ -132,8 +125,6 @@ What's new: more than a year after that public hack, the same single EOA still h
 | **What the owner can't do** | sweep the full ETH balance directly; reading the full source rather than just grepping for `onlyOwner` finds no function for that |
 | **Why it's included** | same missing-multisig pattern as the cases above, but a genuinely smaller amount of damage a compromised key could actually do |
 
-That $188K is the bonding curve's current size, the ceiling this design protects, not a number the compromised key can withdraw in one call.
-
 ### APY Finance: a "1-of-N Safe" made concrete
 
 This project's own methodology (above) names "1-of-N Safe: a real Gnosis Safe, but with a single signer" as a distinct risk category. Here's a live example.
@@ -151,10 +142,16 @@ The point here is the pattern, not the amount, but the amount is real too.
 
 Not every bare-EOA finding is a live target. DeFIL (a Filecoin-lending Compound fork), ChickenSwap, MiniSwap and Mars Poolin all resolve their owner/admin to a bare EOA that hasn't moved in years: DeFIL's since May 2022, ChickenSwap's and MiniSwap's since 2020. None show any sign of being actively watched or targeted the way FWA's or cVault's wallets are. Worth naming as its own category: an admin key nobody has touched in half a decade is a different, quieter kind of risk than one an active team still uses. If it's ever compromised, or the original holder loses access, there is no one left paying attention to react.
 
-All four were pushed to a real dollar figure, or to a documented reason one cannot exist, the same bar as everywhere else in this research:
+All four were pushed to a real dollar figure, or to a documented reason one cannot exist, the same bar as everywhere else in this research. Reserves and pool status were checked directly against each contract, not inferred from an aggregator (DexScreener's own indexer missed the three live pools below entirely):
 
-- **DeFIL**: three real markets sit under its Unitroller (`getAllMarkets()` called directly, not assumed), holding 50,648 eFIL, 182,288 mFIL and 3,102 FILST in cash reserves at time of check. None of the three has a real, currently tradeable price. The Uniswap V2 factory's `getPair()` returns the zero address against WETH for all three (no pool exists at all, checked directly, not just inferred from DexScreener showing zero indexed pairs), CoinGecko's cached price for eFIL ($5.65) and FILST ($0.84) are both frozen since 2022 (`last_updated_at` of 2022-06-29 and 2022-05-26 respectively, against native FIL's real price of ~$0.85 today, the same peg-vs-reality gap already documented for Aurus), and mFIL has no CoinGecko price at all. DefiLlama's coins API does return a live-looking $0.51 for FILST, but with no DEX pool behind it anywhere and no corroborating second source, that number doesn't clear this project's two-source bar, so it isn't used. No dollar figure is claimed for DeFIL.
-- **ChickenSwap, MiniSwap and Mars Poolin**: unlike DeFIL, each of these three does have a live Uniswap V2 pool against WETH, found directly from the factory rather than an aggregator (DexScreener's own indexer missed all three). So a real, current, on-chain price exists for all three. But every pool is close to empty: $150.57 of total two-sided liquidity for ChickenSwap, $277.41 for MiniSwap, and $0.10, ten cents, for Mars Poolin. CoinGecko's cached prices, 458 and 535 days stale for the first two, imply supply-wide values from $6K to $672K, the standard illiquid-token trap of multiplying total supply by a thin pool's marginal price rather than the pool's actual depth. What is really sitting there, the honest ceiling on what a compromised key plus that pool could turn into cash today, is negligible: a few hundred dollars combined across all three. Confirmed structurally as bare-EOA (re-verified directly this pass, same addresses as before), priced honestly as immaterial rather than left unweighed.
+| Protocol | Reserves checked | Live DEX pool vs WETH? | Dollar figure | Why |
+|---|---|---|---|---|
+| DeFIL | 50,648 eFIL, 182,288 mFIL, 3,102 FILST (via Unitroller `getAllMarkets()`) | No, `getPair()` returns the zero address for all three | None | see note below |
+| ChickenSwap | pool liquidity only | Yes, found via the factory directly | ~$150.57 (pool liquidity) | CoinGecko's cached price is 458 days stale, see note below |
+| MiniSwap | pool liquidity only | Yes, found via the factory directly | ~$277.41 (pool liquidity) | CoinGecko's cached price is 535 days stale, see note below |
+| Mars Poolin | pool liquidity only | Yes, found via the factory directly | ~$0.10, ten cents (pool liquidity) | Same live-pool method; the pool is nearly empty |
+
+DeFIL alone carries no dollar figure: CoinGecko's cached prices for eFIL ($5.65) and FILST ($0.84) are frozen since 2022-06-29 and 2022-05-26 respectively (against native FIL's real price of ~$0.85 today, the same peg-vs-reality gap already documented for Aurus), mFIL has no CoinGecko price at all, and DefiLlama's coins API does return a live-looking $0.51 for FILST, but with no DEX pool behind it anywhere and no corroborating second source, so that number doesn't clear this project's two-source bar. For ChickenSwap and MiniSwap, those same stale CoinGecko caches imply supply-wide values from $6K to $672K, the standard illiquid-token trap of multiplying total supply by a thin pool's marginal price rather than the pool's actual depth; the live pool prices in the table above were used instead.
 
 ## What came back safe
 
@@ -162,9 +159,9 @@ For contrast, and because most protocols checked were fine: RAAC, Compound V2, C
 
 The second pass added many more: Easedefi.org (fully renounced), FIAT DAO (fully renounced), Yala, Bio Protocol, Asymmetry Finance, DeFi Franc, BOB Fusion, Metronome V1, Frax FPI, Lybra V2, Blur Lending and Resolv USR (each a genuine multi-signer Safe with a real threshold), Nsure Network and OPINION (3-of-5 Safes), Gro DAO (3-of-7), Goldfinch, mStable, and Puffer UniFi (renounced). Larger, more established names checked along the way, Compound V1, Uniswap V1, Augur, Keep3r Network, 1inch, GMX V1, NFTX, Gnosis Protocol v1, Synthetix V4, were consistently fine, reinforcing the pattern below rather than adding new findings.
 
-A third pass added Ethena's USDe, and caught a real secondary-source trap along the way. A generic search for "EthenaMinting owner" turns up an address Ethena's own docs page lists, but calling `owner()` directly against the live EthenaMinting V2 contract and the USDe token itself returns a different address, confirmed to be an OpenZeppelin `TimelockController` with a 24-hour `getMinDelay()`, not the docs-page address at all. The older EthenaMinting V1 contract's `owner()` resolves to yet a third address, a genuine 5-of-10 Gnosis Safe. Read in order: V1 (likely legacy) sits behind a 5-of-10 multisig, V2 and the token itself, the two contracts that actually matter today, sit behind a 24-hour timelock. Whatever the docs-page address is for, it isn't the current live admin of either.
+Ethena's USDe caught a real secondary-source trap: a generic search for "EthenaMinting owner" turns up an address Ethena's own docs page lists, but calling `owner()` directly against the live EthenaMinting V2 contract and the USDe token itself returns a different address, an OpenZeppelin `TimelockController` with a 24-hour `getMinDelay()`. The older EthenaMinting V1 contract's `owner()` resolves to yet a third address, a genuine 5-of-10 Gnosis Safe. Either way, the docs-page address isn't the current live admin of V1, V2, or the token.
 
-A fourth pass opened the $20M-$100M band this research had flagged as untested, starting with Aegis YUSD (~$33M, a synthetic dollar DefiLlama lists with zero audits). Clean at the root: the YUSD token's owner, AegisMinting's default admin (behind a 3-day handover delay), AegisConfig and the staked sYUSD vault's proxy admin all resolve to the same genuine 3-of-5 Gnosis Safe, confirmed by replaying every role grant since deployment, not just reading the team's own role map. Two operational roles (moving collateral to custodians, minting income) do sit on bare EOAs, but reading the source shows both are fenced in: collateral can only go to custodians the multisig itself whitelists, and income minting needs a separate trusted signer plus real collateral already in the contract. One key can slow things down, not walk away with the backing.
+Aegis YUSD (~$33M, a synthetic dollar DefiLlama lists with zero audits) is clean at the root: the YUSD token's owner, AegisMinting's default admin (behind a 3-day handover delay), AegisConfig and the staked sYUSD vault's proxy admin all resolve to the same genuine 3-of-5 Gnosis Safe, confirmed by replaying every role grant since deployment. Two operational roles (moving collateral to custodians, minting income) do sit on bare EOAs, but both are fenced in: collateral can only go to custodians the multisig itself whitelists, and income minting needs a separate trusted signer plus real collateral already in the contract. One key can slow things down, not walk away with the backing.
 
 ## The pattern
 
@@ -172,33 +169,29 @@ Larger, higher-TVL protocols skew toward already having proper multisig/timelock
 
 The second pass checked this claim rather than just repeating it: zero-audit protocols in the $50K-$700K range and the $150K-$5M range both turned up multiple bare-EOA and 1-of-N-Safe cases, while the same filter run against $5M-$20M protocols came back consistently clean. Three separate TVL bands, the same result each time. That isn't a coincidence from one lucky search.
 
-A follow-up pass went back through every case that used to be "confirmed pattern, no dollar figure" and forced each one to an actual number, or to a documented reason no number is possible, rather than leaving it unweighed. The result reinforces the existing bands rather than shifting them: gBERA decomposed to ~$750K, JayPeggers to ~$188K, APY Finance to ~$51K (plus $18.5K of that sitting directly at the under-secured Safe itself), UwU Lend to $48K-$62K, right at the edge of the $50K-$5M range already described as exposed: the $62K high end clears the $50K floor, but the $48K low end sits just under it. The abandoned-key cluster (ChickenSwap, MiniSwap, Mars Poolin) turned out to be genuinely negligible once actually priced off live pool reserves instead of a stale cache, a few hundred dollars combined rather than the six-figure sums a naive aggregator read would suggest. Either way, nothing newly priced comes anywhere close to the $5M-$20M band that keeps coming back clean.
+A follow-up pass went back through every case that used to be "confirmed pattern, no dollar figure" and forced each one to an actual number, or to a documented reason no number is possible, rather than leaving it unweighed; the result reinforces the existing bands (see the case sections above for each figure) rather than shifting them.
 
 ## Caveats
 
 This is a first-pass filter plus manual verification, not an audit. A few things it does not resolve:
 
 - Aurus also runs a fourth, much smaller tokenized asset (a Canadian-gold product, "CGR") not counted in DefiLlama's TVL for the protocol: real, but negligible activity (7 transactions ever, $0 current balance).
-- Update from a later pass through this research: every bare-EOA/1-of-N-Safe candidate that previously lacked a dollar figure (Smilee Finance's gBERA, JayPeggers, APY Finance, UwU Lend, and the ChickenSwap/MiniSwap/Mars Poolin cluster) has now been decomposed token-by-token and cross-checked against at least two independent price sources, the same standard used for Aurus and cVault Finance, with every on-chain balance re-verified directly (`balanceOf`/`eth_getBalance`/`totalAssets`) rather than trusted from a prior note. DeFIL remains the one exception with no dollar figure: none of its three collateral tokens (eFIL, mFIL, FILST) has a real DEX pool anywhere, and the cached prices that do exist are years stale or uncorroborated. Nothing in this dataset is still sitting in the old "confirmed pattern, unweighed impact" bucket.
+- DeFIL remains the one exception with no dollar figure: none of its three collateral tokens (eFIL, mFIL, FILST) has a real DEX pool anywhere, and the cached prices that do exist are years stale or uncorroborated.
 - Block explorers' "token holdings" aggregates can be badly inflated by spam tokens carrying fabricated prices. Every dollar figure in this research was decomposed token-by-token and cross-checked against a second price source before being trusted. Don't take a headline aggregate at face value, here or anywhere else.
 - The tool only recognizes standard `Ownable`/`AccessControl`/Gnosis Safe patterns. A protocol that rolls its own bespoke access control (as Wasabi itself did) needs the source read by hand.
 
 This is independent research, not an audit or a security guarantee. Everything above is stated at the confidence level the on-chain data actually supports.
 
-## What's still open
-
-The $5M-$20M TVL band has come back consistently clean three separate times now. The $20M-$100M band, one tier up, now has its first data point (Aegis YUSD, clean at the root), which is one protocol, not a pattern. More of that band is next.
-
 ## Status
 
 Last verified: 2026-09-13.
 
-Well over 70 protocols checked by hand, 12 confirmed live and pushed to a real dollar figure, or to a documented reason none is possible (DeFIL, whose collateral tokens have no live DEX pool anywhere), plus 1 clean reference case in the $20M-$100M band (Aegis YUSD). Not a finished survey: more of the $20M-$100M band described in What's still open above is still to check.
+Well over 70 protocols checked by hand: 12 confirmed live and pushed to a real dollar figure, or to a documented reason none is possible (DeFIL, whose collateral tokens have no live DEX pool anywhere), plus 1 clean reference case in the $20M-$100M band (Aegis YUSD, clean at the root). The $5M-$20M TVL band has come back consistently clean three separate times now. The $20M-$100M band, one tier up, has only that one data point so far, not yet a pattern; more of that band is still to check, so this isn't a finished survey.
 
 ## About
 
-Part of an ongoing program of independent on-chain research, same discipline throughout: primary-source anchors, on-chain reconstruction, corrections issued openly when something's found wrong. Related work: [multisig-overlap](https://github.com/RealSpap/multisig-overlap-showcase) (341 protocols screened for shared multisig signers), [block-market-concentration](https://github.com/RealSpap/block-market-concentration-showcase) (who really builds and profits from Ethereum's blocks), and [onchain-postmortems](https://github.com/RealSpap/onchain-postmortems) (40 DeFi exploits independently reconstructed, ~$783.7M recomputed). Every pass across this program has found something real; none has come back empty. Ongoing work and dashboards: [Dune](https://dune.com/s_pap), [X](https://x.com/RealSpap).
+[About this research program](https://realspap.github.io/methodology.html). Related work: [multisig-overlap](https://github.com/RealSpap/multisig-overlap-showcase) (341 protocols screened for shared multisig signers), [block-market-concentration](https://github.com/RealSpap/block-market-concentration-showcase) (who really builds and profits from Ethereum's blocks), and [onchain-postmortems](https://github.com/RealSpap/onchain-postmortems) (40 DeFi exploits independently reconstructed, ~$783.7M recomputed). Every pass across this program has found something real; none has come back empty.
 
 ## License
 
-All rights reserved. This repository documents the results; the tool itself is available under a commercial license, see above.
+All rights reserved for the findings in this repository; the verification tool itself is available under a separate commercial license. See the License section of [methodology](https://realspap.github.io/methodology.html) for details.
