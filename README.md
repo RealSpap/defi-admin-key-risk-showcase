@@ -164,6 +164,8 @@ The second pass added many more: Easedefi.org (fully renounced), FIAT DAO (fully
 
 A third pass added Ethena's USDe, and caught a real secondary-source trap along the way. A generic search for "EthenaMinting owner" turns up an address Ethena's own docs page lists, but calling `owner()` directly against the live EthenaMinting V2 contract and the USDe token itself returns a different address, confirmed to be an OpenZeppelin `TimelockController` with a 24-hour `getMinDelay()`, not the docs-page address at all. The older EthenaMinting V1 contract's `owner()` resolves to yet a third address, a genuine 5-of-10 Gnosis Safe. Read in order: V1 (likely legacy) sits behind a 5-of-10 multisig, V2 and the token itself, the two contracts that actually matter today, sit behind a 24-hour timelock. Whatever the docs-page address is for, it isn't the current live admin of either.
 
+A fourth pass opened the $20M-$100M band this research had flagged as untested, starting with Aegis YUSD (~$33M, a synthetic dollar DefiLlama lists with zero audits). Clean at the root: the YUSD token's owner, AegisMinting's default admin (behind a 3-day handover delay), AegisConfig and the staked sYUSD vault's proxy admin all resolve to the same genuine 3-of-5 Gnosis Safe, confirmed by replaying every role grant since deployment, not just reading the team's own role map. Two operational roles (moving collateral to custodians, minting income) do sit on bare EOAs, but reading the source shows both are fenced in: collateral can only go to custodians the multisig itself whitelists, and income minting needs a separate trusted signer plus real collateral already in the contract. One key can slow things down, not walk away with the backing.
+
 ## The pattern
 
 Larger, higher-TVL protocols skew toward already having proper multisig/timelock hygiene. Badly-secured ones tend to get hacked and drop out of the rankings, the way Wasabi itself did. Real risk concentrates disproportionately in smaller, newer, lower-TVL protocols, exactly where Aurus and Smilee's gBERA were found. cVault Finance is the exception that tests the rule: old, not small, and still exposed, because nobody ever came back to fix it after 2020.
@@ -185,13 +187,13 @@ This is independent research, not an audit or a security guarantee. Everything a
 
 ## What's still open
 
-The $5M-$20M TVL band has come back consistently clean three separate times now. The next honest test of that pattern is the $20M-$100M band, not yet checked here, one tier up from everything tested so far.
+The $5M-$20M TVL band has come back consistently clean three separate times now. The $20M-$100M band, one tier up, now has its first data point (Aegis YUSD, clean at the root), which is one protocol, not a pattern. More of that band is next.
 
 ## Status
 
 Last verified: 2026-09-13.
 
-Well over 70 protocols checked by hand, 12 confirmed live and pushed to a real dollar figure, or to a documented reason none is possible (DeFIL, whose collateral tokens have no live DEX pool anywhere). Not a finished survey: the $20M-$100M band described in What's still open above has not yet been checked.
+Well over 70 protocols checked by hand, 12 confirmed live and pushed to a real dollar figure, or to a documented reason none is possible (DeFIL, whose collateral tokens have no live DEX pool anywhere), plus 1 clean reference case in the $20M-$100M band (Aegis YUSD). Not a finished survey: more of the $20M-$100M band described in What's still open above is still to check.
 
 ## About
 
