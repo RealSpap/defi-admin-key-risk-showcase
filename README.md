@@ -190,7 +190,7 @@ Well over 70 protocols checked by hand: 12 confirmed live and pushed to a real d
 
 ## About
 
-[About this research program](https://realspap.github.io/methodology.html). Related work: [multisig-overlap](https://github.com/RealSpap/multisig-overlap-showcase) (341 protocols screened for shared multisig signers), [block-market-concentration](https://github.com/RealSpap/block-market-concentration-showcase) (who really builds and profits from Ethereum's blocks), and [onchain-postmortems](https://github.com/RealSpap/onchain-postmortems) (40 DeFi exploits independently reconstructed, ~$783.7M recomputed). Every pass across this program has found something real; none has come back empty.
+[About this research program](https://realspap.github.io/methodology.html). Related work: [multisig-overlap](https://github.com/RealSpap/multisig-overlap-showcase) (342 protocols screened for shared multisig signers), [block-market-concentration](https://github.com/RealSpap/block-market-concentration-showcase) (who really builds and profits from Ethereum's blocks), and [onchain-postmortems](https://github.com/RealSpap/onchain-postmortems) (42 DeFi exploits independently reconstructed, ~$783.9M recomputed). Every pass across this program has found something real; none has come back empty.
 
 ## License
 
