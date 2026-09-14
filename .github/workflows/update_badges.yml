@@ -1,0 +1,33 @@
+name: Update badge data from README
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-badges-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  sync-badges:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Sync badge data with README.md
+        run: python3 scripts/sync_badges.py --repo-root .

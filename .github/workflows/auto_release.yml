@@ -26,12 +26,14 @@ jobs:
           echo "Author email: $AUTHOR_EMAIL"
           SKIP=false
 
-          # This repo currently uses static badges (no badge-data-*.json,
-          # no sync bot, no update_badges.yml workflow), unlike some
-          # sibling repos in this research program. The two checks below
-          # are kept for forward compatibility in case that automation is
-          # added later, but they are inert today: no commit in this
-          # repo's history matches either pattern.
+          # This repo now has its own badge-sync bot (scripts/sync_badges.py,
+          # driven by .github/workflows/update_badges.yml), matching the
+          # pattern already used by sibling repos in this research program.
+          # The two checks below keep that bot's own automated commits
+          # (author email badge-sync-bot@users.noreply.github.com, subject
+          # "chore: sync badge data with README ...") from triggering a
+          # duplicate GitHub Release for a change that carries no research
+          # content of its own.
           if [ "$AUTHOR_EMAIL" = "badge-sync-bot@users.noreply.github.com" ]; then
             SKIP=true
           fi
