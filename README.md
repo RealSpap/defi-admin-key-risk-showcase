@@ -151,7 +151,9 @@ All four were pushed to a real dollar figure, or to a documented reason one cann
 | MiniSwap | pool liquidity only | Yes, found via the factory directly | ~$277.41 (pool liquidity) | CoinGecko's cached price is 535 days stale, see note below |
 | Mars Poolin | pool liquidity only | Yes, found via the factory directly | ~$0.10, ten cents (pool liquidity) | Same live-pool method; the pool is nearly empty |
 
-DeFIL alone carries no dollar figure: CoinGecko's cached prices for eFIL ($5.65) and FILST ($0.84) are frozen since 2022-06-29 and 2022-05-26 respectively (against native FIL's real price of ~$0.85 today, the same peg-vs-reality gap already documented for Aurus), mFIL has no CoinGecko price at all, and DefiLlama's coins API does return a live-looking $0.51 for FILST, but with no DEX pool behind it anywhere and no corroborating second source, so that number doesn't clear this project's two-source bar. For ChickenSwap and MiniSwap, those same stale CoinGecko caches imply supply-wide values from $6K to $672K, the standard illiquid-token trap of multiplying total supply by a thin pool's marginal price rather than the pool's actual depth; the live pool prices in the table above were used instead.
+Of these four, DeFIL alone carries no dollar figure: CoinGecko's cached prices for eFIL ($5.65) and FILST ($0.84) are frozen since 2022-06-29 and 2022-05-26 respectively (against native FIL's real price of ~$0.85 today, the same peg-vs-reality gap already documented for Aurus), mFIL has no CoinGecko price at all, and DefiLlama's coins API does return a live-looking $0.51 for FILST, but with no DEX pool behind it anywhere and no corroborating second source, so that number doesn't clear this project's two-source bar.
+
+For ChickenSwap and MiniSwap, those same stale CoinGecko caches imply supply-wide values from $6K to $672K, the standard illiquid-token trap of multiplying total supply by a thin pool's marginal price rather than the pool's actual depth; the live pool prices in the table above were used instead.
 
 ## What came back safe
 
@@ -178,7 +180,7 @@ A follow-up pass went back through every case that used to be "confirmed pattern
 This is a first-pass filter plus manual verification, not an audit. A few things it does not resolve:
 
 - Aurus also runs a fourth, much smaller tokenized asset (a Canadian-gold product, "CGR") not counted in DefiLlama's TVL for the protocol: real, but negligible activity (7 transactions ever, $0 current balance).
-- DeFIL remains the one exception with no dollar figure: none of its three collateral tokens (eFIL, mFIL, FILST) has a real DEX pool anywhere, and the cached prices that do exist are years stale or uncorroborated.
+- DeFIL and Fake World Assets (FWA) are the two exceptions with no dollar figure: none of DeFIL's three collateral tokens (eFIL, mFIL, FILST) has a real DEX pool anywhere, and the cached prices that do exist are years stale or uncorroborated; FWA's risk is about future proceeds routing rather than funds already parked, since the contract itself holds only ~$160.
 - Block explorers' "token holdings" aggregates can be badly inflated by spam tokens carrying fabricated prices. Every dollar figure in this research was decomposed token-by-token and cross-checked against a second price source before being trusted. Don't take a headline aggregate at face value, here or anywhere else.
 - The tool only recognizes standard `Ownable`/`AccessControl`/Gnosis Safe patterns. A protocol that rolls its own bespoke access control (as Wasabi itself did) needs the source read by hand.
 
