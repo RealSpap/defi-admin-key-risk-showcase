@@ -163,6 +163,8 @@ Ethena's USDe caught a real secondary-source trap: a generic search for "EthenaM
 
 Aegis YUSD (~$33M, a synthetic dollar DefiLlama lists with zero audits) is clean at the root: the YUSD token's owner, AegisMinting's default admin (behind a 3-day handover delay), AegisConfig and the staked sYUSD vault's proxy admin all resolve to the same genuine 3-of-5 Gnosis Safe, confirmed by replaying every role grant since deployment. Two operational roles (moving collateral to custodians, minting income) do sit on bare EOAs, but both are fenced in: collateral can only go to custodians the multisig itself whitelists, and income minting needs a separate trusted signer plus real collateral already in the contract. One key can slow things down, not walk away with the backing.
 
+3F (~$32M, leveraged exposure to tokenized real-world assets built on Morpho) is the second protocol checked in the $20M-$100M band, and also clean at the root. Every contract that holds value, its core Facility, the three funded wrapper tokens and all seven leveraged vaults, upgrades only through a timelock with a 24-hour delay, and the only address that can queue anything into it is a 2-of-3 Safe whose signers are an Aragon DAO, a separate 4-of-7 Safe and one individual key. Two findings worth writing down even so. The team's own deployment script names that Safe as the direct upgrade admin; on-chain, the timelock sits in between, which is stricter than the script suggests. And one hot operational key can rebind where an intent's money goes whenever that intent was created with a guardian quorum of zero, which 666 of 9,276 intents were. Reading every intent's balance shows about $304 left across all of them, in intents already closed to that key, so the gap is real in the code and empty in practice. DefiLlama lists 3F with zero audits; the official repository ships five.
+
 ## The pattern
 
 Larger, higher-TVL protocols skew toward already having proper multisig/timelock hygiene. Badly-secured ones tend to get hacked and drop out of the rankings, the way Wasabi itself did. Real risk concentrates disproportionately in smaller, newer, lower-TVL protocols, exactly where Aurus and Smilee's gBERA were found. cVault Finance is the exception that tests the rule: old, not small, and still exposed, because nobody ever came back to fix it after 2020.
@@ -184,9 +186,9 @@ This is independent research, not an audit or a security guarantee. Everything a
 
 ## Status
 
-Last verified: 2026-09-13.
+Last verified: 2026-09-14.
 
-Well over 70 protocols checked by hand: 12 confirmed live and pushed to a real dollar figure, or to a documented reason none is possible (DeFIL, whose collateral tokens have no live DEX pool anywhere), plus 1 clean reference case in the $20M-$100M band (Aegis YUSD, clean at the root). The $5M-$20M TVL band has come back consistently clean three separate times now. The $20M-$100M band, one tier up, has only that one data point so far, not yet a pattern; more of that band is still to check, so this isn't a finished survey.
+Well over 70 protocols checked by hand: 12 confirmed live and pushed to a real dollar figure, or to a documented reason none is possible (DeFIL, whose collateral tokens have no live DEX pool anywhere), plus 2 clean reference cases in the $20M-$100M band (Aegis YUSD and 3F, both clean at the root). The $5M-$20M TVL band has come back consistently clean three separate times now. The $20M-$100M band, one tier up, now has two data points, both clean, still too few to call a pattern; more of that band is still to check, so this isn't a finished survey.
 
 ## About
 
