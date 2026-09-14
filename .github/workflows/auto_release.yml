@@ -26,9 +26,12 @@ jobs:
           echo "Author email: $AUTHOR_EMAIL"
           SKIP=false
 
-          # This repo's own bot: scripts/sync_badges.py commits as
-          # badge-sync-bot whenever it rewrites badge-data-*.json to match
-          # README.md. State-only, not a research pass.
+          # This repo currently uses static badges (no badge-data-*.json,
+          # no sync bot, no update_badges.yml workflow), unlike some
+          # sibling repos in this research program. The two checks below
+          # are kept for forward compatibility in case that automation is
+          # added later, but they are inert today: no commit in this
+          # repo's history matches either pattern.
           if [ "$AUTHOR_EMAIL" = "badge-sync-bot@users.noreply.github.com" ]; then
             SKIP=true
           fi
