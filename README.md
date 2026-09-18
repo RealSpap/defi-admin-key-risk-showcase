@@ -28,6 +28,7 @@ Severity is not a code-bug scale, so the usual Critical/High/Medium/Low vocabula
 | Smilee Finance / gBERA | AccessControl, multi-holder, no threshold | ~$750K | High |
 | DELTA LSW (cVault legacy) | Bare EOA (via wrapper contract) | ~$36K | Medium |
 | Fake World Assets / FWA | Bare EOA | No dollar figure (risk is future proceeds routing, not funds already parked; the contract itself holds ~$160) | Critical |
+| TokenWorks NFT Strategies (same key as FWA) | Bare EOA | No dollar figure (fee routing and transfer gating; the ~22 ETH and 37 CryptoPunks treasury is walled off by a restricted final-owner contract) | Medium |
 | UwU Lend | Bare EOA | $48,000 to $62,000 | High |
 | JayPeggers | Bare EOA | ~$188,460 | Medium |
 | APY Finance | 1-of-N Safe | ~$51,300 (of which ~$18,500 sits directly in the Safe) | High |
@@ -36,7 +37,7 @@ Severity is not a code-bug scale, so the usual Critical/High/Medium/Low vocabula
 | MiniSwap | Bare EOA, dormant | ~$277.41 (pool liquidity) | Low |
 | Mars Poolin | Bare EOA, dormant | ~$0.10 (pool liquidity) | Low |
 
-By severity: 2 Critical, 4 High, 2 Medium, 4 Low, across the 12 cases above. cVault Finance/CORE and Fake World Assets currently share the top spot: both Critical, both under documented active targeting right now, not just theoretically exposed.
+By severity: 2 Critical, 4 High, 3 Medium, 4 Low, across the 13 cases above. cVault Finance/CORE and Fake World Assets currently share the top spot: both Critical, both under documented active targeting right now, not just theoretically exposed.
 
 A few of these severity calls (Aurus, cVault Finance/CORE and FWA, DELTA LSW and JayPeggers, APY Finance) are not obvious from the number alone; see each case's own section below for the reasoning.
 
@@ -109,6 +110,12 @@ The original version of this research flagged cVault Finance's DELTA LSW contrac
 
 This is a live wallet, not an old one: 2,227 transactions, most recent three days before this check, holding ~997 ETH and ~$400K of FWA personally. It has also recently received transfers from addresses Etherscan tags `Fake_Phishing`, the same "active target" pattern already seen with cVault Finance's deployer wallet, on a completely unrelated project. DefiLlama records zero audits for FWA.
 
+### The same key runs a second product
+
+TokenWorks NFT Strategies is a separate product line from the same `tokenworks.eth` EOA already named above for FWA (~938 ETH held personally, the same wallet also tagged `Fake_Phishing`-adjacent). `owner()` of the NFTStrategyFactory, and the root of the PunkStrategy ownership chain (PunkStrategy -> Patch -> the Patch's own owner -> PunkStrategyOwnerNFT), both resolve to that same bare EOA, confirmed on two independent RPCs. Verified source (Sourcify) shows real power: it receives the protocol's fee slice today, can override per-collection fees via a hook, and controls the router allowlist that gates transfers of every strategy token.
+
+What the key cannot reach: PunkStrategy's own 21.97 ETH, or the Patch's 37 CryptoPunks. The Patch's owner contract (not independently verified) exposes only `setPriceMultiplier`, `updateFeeBips` and `transferOwnership` in its bytecode, no sweep function, so that treasury sits behind a deliberately narrower final-owner contract with its own 24-hour delay. Same defect as JayPeggers above (a bare EOA with no threshold), same limited-reach reasoning: rated Medium, not Critical or High, since there is no principal a single compromised key could walk away with, only fee routing and transfer gating.
+
 ### UwU Lend (fork of Aave, hacked once already)
 
 The UwU governance/reward token's `owner()` is a bare EOA tagged `sifu.eth`. That identity is already public record, not something uncovered here: multiple outlets (CoinDesk, Unchained, Protos) have reported "Sifu" as Michael Patryn, co-founder of the collapsed QuadrigaCX exchange, doxxed by on-chain investigator ZachXBT in January 2022. Patryn launched UwU Lend in 2022. The protocol lost roughly $19.4M in June 2024 to an oracle-manipulation exploit, a different vulnerability class than the one described here, already extensively covered by security firms at the time.
@@ -158,7 +165,7 @@ For ChickenSwap and MiniSwap, those same stale CoinGecko caches imply supply-wid
 
 ## What came back safe
 
-For contrast, and because most protocols checked were fine: RAAC, Compound V2, Cap (3-of-5 Safe behind a 24h Timelock, full chain traced), Frankencoin (fully immutable), Twyne, LandX Finance, Notional V2 (2-of-7 Safe), Threshold thUSD (48h Timelock), Inverse Finance Frontier (48h Timelock behind full governance), UniverseXYZ (DAO governance), Origin Dollar (48h Timelock), and cVault Finance's own DELTA Multisig.
+For contrast, and because most protocols checked were fine: RAAC, Compound V2, Cap (3-of-5 Safe behind a 24h Timelock, full chain traced), Frankencoin (fully immutable), Twyne, LandX Finance, Notional V2 (2-of-7 Safe), Threshold thUSD (48h Timelock), Inverse Finance Frontier (48h Timelock behind full governance), UniverseXYZ (DAO governance), Origin Dollar (48h Timelock), and cVault Finance's own DELTA Multisig. Also clean: stake.link (24h Timelock, 6-of-8 Safe proposer/canceller), infiniFi (7-day timelock, 4-of-8 Safe proposer), Concentrator and CLever (6-of-9 Safe, no timelock), Vesper (3-of-6 Safe), AUTOfinance (three 6-of-N Safes), and Harvest Finance (2-of-3 Safe, no timelock).
 
 The second pass added many more: Easedefi.org (fully renounced), FIAT DAO (fully renounced), Yala, Bio Protocol, Asymmetry Finance, DeFi Franc, BOB Fusion, Metronome V1, Frax FPI, Lybra V2, Blur Lending and Resolv USR (each a genuine multi-signer Safe with a real threshold), Nsure Network and OPINION (3-of-5 Safes), Gro DAO (3-of-7), Goldfinch, mStable, and Puffer UniFi (renounced). Larger, more established names checked along the way, Compound V1, Uniswap V1, Augur, Keep3r Network, 1inch, GMX V1, NFTX, Gnosis Protocol v1, Synthetix V4, were consistently fine, reinforcing the pattern below rather than adding new findings.
 
@@ -191,9 +198,9 @@ This is independent research, not an audit or a security guarantee. Everything a
 
 ## Status
 
-Last verified: 2026-09-14.
+Last verified: 2026-09-18.
 
-Well over 70 protocols checked by hand: 12 confirmed live and pushed to a real dollar figure, or to a documented reason none is possible (DeFIL, whose collateral tokens have no live DEX pool anywhere), plus 2 clean reference cases in the $20M-$100M band (Aegis YUSD and 3F, both clean at the root). The $5M-$20M TVL band has come back consistently clean three separate times now. The $20M-$100M band, one tier up, now has two data points, both clean, still too few to call a pattern; more of that band is still to check, so this isn't a finished survey.
+Well over 70 protocols checked by hand: 13 confirmed live and pushed to a real dollar figure, or to a documented reason none is possible or none is reachable (DeFIL, whose collateral tokens have no live DEX pool anywhere; TokenWorks NFT Strategies, whose bare-EOA owner has real power but no principal within reach), plus 2 clean reference cases in the $20M-$100M band (Aegis YUSD and 3F, both clean at the root). The $5M-$20M TVL band has come back consistently clean three separate times now. The $20M-$100M band, one tier up, now has two data points, both clean, still too few to call a pattern; more of that band is still to check, so this isn't a finished survey.
 
 ## About
 
