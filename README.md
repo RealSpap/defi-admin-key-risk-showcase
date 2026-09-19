@@ -36,8 +36,11 @@ Severity is not a code-bug scale, so the usual Critical/High/Medium/Low vocabula
 | ChickenSwap | Bare EOA, dormant | ~$150.57 (pool liquidity) | Low |
 | MiniSwap | Bare EOA, dormant | ~$277.41 (pool liquidity) | Low |
 | Mars Poolin | Bare EOA, dormant | ~$0.10 (pool liquidity) | Low |
+| Sentora (Morpho PYUSD and RLUSD vaults) | 1-of-1 Safe (owner and curator) | ~$814.7M deposited, not directly drainable (3-day timelock, withdrawals cannot be gated) | Medium |
+| UltraYield (Morpho vaults) | 1-of-N Safe (1 of 5) | ~$240K | Medium |
+| K3 Capital (Morpho vault) | 1-of-N Safe (1 of 3) | ~$0 (empty vault) | Low |
 
-By severity: 2 Critical, 4 High, 3 Medium, 4 Low, across the 13 cases above. cVault Finance/CORE and Fake World Assets currently share the top spot: both Critical, both under documented active targeting right now, not just theoretically exposed.
+By severity: 2 Critical, 4 High, 5 Medium, 5 Low, across the 16 cases above. cVault Finance/CORE and Fake World Assets currently share the top spot: both Critical, both under documented active targeting right now, not just theoretically exposed.
 
 A few of these severity calls (Aurus, cVault Finance/CORE and FWA, DELTA LSW and JayPeggers, APY Finance) are not obvious from the number alone; see each case's own section below for the reasoning.
 
@@ -67,7 +70,7 @@ Checks the two most common real-world admin patterns, a single-address getter (`
 
 ## What it found, checked by hand
 
-Well over 70 protocols have now been checked manually across Ethereum and several L2s (Base, Optimism, Linea, Berachain, Sonic, Blast): the original ~25, plus a second pass focused on smaller, newer, zero-audit protocols pulled directly from DefiLlama's own listings. Most came back clean, see below. Several came back genuinely live and at risk, beyond the Wasabi anchor.
+Around 80 protocols have now been checked manually across Ethereum and several L2s (Base, Optimism, Linea, Berachain, Sonic, Blast): the original ~25, plus a second pass focused on smaller, newer, zero-audit protocols pulled directly from DefiLlama's own listings. Most came back clean, see below. Several came back genuinely live and at risk, beyond the Wasabi anchor.
 
 ### Aurus (tokenized gold/silver/platinum)
 
@@ -144,7 +147,20 @@ This project's own methodology (above) names "1-of-N Safe: a real Gnosis Safe, b
 | **Token value** | **~$51,300**, decomposed against the verified `totalSupply()` (100,000,000 APY) instead of quoted from a single aggregator (CoinGecko at $0.00051303 and DefiLlama's coins API at $0.00051309, both live, cross-checked against a real Uniswap ETH pool holding $13,075 of liquidity at essentially the same price) |
 | **Held directly by the Safe** | 36,101,859 APY (confirmed with a direct `balanceOf` call), more than a third of total supply, worth roughly $18,500 at the same price, movable by any one of the six signers today with one signature, on top of whatever `onlyOwner` powers the token contract grants over the rest |
 
-The point here is the pattern, not the amount, but the amount is real too.
+The point here is the pattern, not the amount, but the amount is real too. Re-checked on 2026-09-19: same six signers, same threshold of 1, same balance to the wei; only the token price has moved (the Safe's holding is now worth about $19,400).
+
+### Sentora: a 1-of-1 Safe at the $800M scale
+
+Sentora curates the two main Morpho vaults for PayPal's PYUSD and Ripple's RLUSD on Ethereum. Together they hold about **$814.7M** (441.19M PYUSD and 373.52M RLUSD read with `totalAssets()`, both priced at $0.9999 by DefiLlama and CoinGecko), from more than 200 depositors each.
+
+| | |
+|---|---|
+| **Owner** | a Gnosis Safe with a threshold of 1 and a single owner, a plain wallet that has sent 326 transactions |
+| **Curator** | a second 1-of-1 Safe, again one active wallet (305 transactions), also an allocator and a sentinel |
+| **What one key can do at once** | change allocators, block new deposits, set fees within the contract's hard caps |
+| **What it cannot do at once** | route funds to a new market or adapter (3-day timelock) or stop withdrawals (all three withdrawal-side gates are permanently given up on-chain) |
+
+This is why it sits at Medium, not High: a stolen key would have to announce any move on the money three days ahead, and depositors could leave in the meantime. Morpho's own curator guide asks for a real multisig "or an equivalent institutional-grade MPC wallet" for the owner role; an MPC wallet behind a 1-of-1 Safe would look exactly like this on-chain, and nothing on-chain can confirm or rule that out. Sentora hasn't published its signer setup.
 
 ### A cluster of abandoned keys
 
@@ -165,9 +181,9 @@ For ChickenSwap and MiniSwap, those same stale CoinGecko caches imply supply-wid
 
 ## What came back safe
 
-For contrast, and because most protocols checked were fine: RAAC, Compound V2, Cap (3-of-5 Safe behind a 24h Timelock, full chain traced), Frankencoin (fully immutable), Twyne, LandX Finance, Notional V2 (2-of-7 Safe), Threshold thUSD (48h Timelock), Inverse Finance Frontier (48h Timelock behind full governance), UniverseXYZ (DAO governance), Origin Dollar (48h Timelock), and cVault Finance's own DELTA Multisig. Also clean: stake.link (24h Timelock, 6-of-8 Safe proposer/canceller), infiniFi (7-day timelock, 4-of-8 Safe proposer), Concentrator and CLever (6-of-9 Safe, no timelock), Vesper (3-of-6 Safe), AUTOfinance (three 6-of-N Safes), and Harvest Finance (2-of-3 Safe, no timelock).
+For contrast, and because most protocols checked were fine: RAAC, Compound V2, Cap (3-of-5 Safe behind a 24h Timelock, full chain traced), Frankencoin (fully immutable), Twyne, LandX Finance, Notional V2 (2-of-7 Safe), Threshold thUSD (48h Timelock), Inverse Finance Frontier (48h Timelock behind full governance), UniverseXYZ (DAO governance), Origin Dollar (48h Timelock), and cVault Finance's own DELTA Multisig. Also clean: TermMax (4-of-7 Safe holding its AccessManager's admin role), stake.link (24h Timelock, 6-of-8 Safe proposer/canceller), infiniFi (7-day timelock, 4-of-8 Safe proposer), Concentrator and CLever (6-of-9 Safe, no timelock), Vesper (3-of-6 Safe), AUTOfinance (three 6-of-N Safes), and Harvest Finance (2-of-3 Safe, no timelock).
 
-The second pass added many more: Easedefi.org (fully renounced), FIAT DAO (fully renounced), Yala, Bio Protocol, Asymmetry Finance, DeFi Franc, BOB Fusion, Metronome V1, Frax FPI, Lybra V2, Blur Lending and Resolv USR (each a genuine multi-signer Safe with a real threshold), Nsure Network and OPINION (3-of-5 Safes), Gro DAO (3-of-7), Goldfinch, mStable, and Puffer UniFi (renounced). Larger, more established names checked along the way, Compound V1, Uniswap V1, Augur, Keep3r Network, 1inch, GMX V1, NFTX, Gnosis Protocol v1, Synthetix V4, were consistently fine, reinforcing the pattern below rather than adding new findings.
+The second pass added many more: Easedefi.org (fully renounced), FIAT DAO (fully renounced), Yala, Bio Protocol, Asymmetry Finance, DeFi Franc, BOB Fusion, Metronome V1, Frax FPI, Lybra V2, Blur Lending and Resolv USR (each a genuine multi-signer Safe with a real threshold), Nsure Network and OPINION (3-of-5 Safes), Gro DAO (3-of-7), Goldfinch, mStable, and Puffer UniFi (renounced). Five of the largest Morpho vault curators were checked on 2026-09-19 as well, each on its biggest Ethereum vault: Gauntlet (4-of-7 owner, 3-of-7 curator, 7-day timelock), Steakhouse Financial (5-of-10 owner, 2-of-7 curator, 7-day timelock), RockawayX (4-of-8, 3-day timelock), Armitage by Wintermute (4-of-6 owner, 3-of-5 curator, 7-day timelock) and KPK (5-of-8 owner, 2-of-5 curator, 3-day timelock). Larger, more established names checked along the way, Compound V1, Uniswap V1, Augur, Keep3r Network, 1inch, GMX V1, NFTX, Gnosis Protocol v1, Synthetix V4, were consistently fine, reinforcing the pattern below rather than adding new findings.
 
 Ethena's USDe caught a real secondary-source trap: a generic search for "EthenaMinting owner" turns up an address Ethena's own docs page lists, but calling `owner()` directly against the live EthenaMinting V2 contract and the USDe token itself returns a different address, an OpenZeppelin `TimelockController` with a 24-hour `getMinDelay()`. The older EthenaMinting V1 contract's `owner()` resolves to yet a third address, a genuine 5-of-10 Gnosis Safe. Either way, the docs-page address isn't the current live admin of V1, V2, or the token.
 
@@ -179,7 +195,7 @@ Two findings worth writing down even so. The team's own deployment script names 
 
 ## The pattern
 
-Larger, higher-TVL protocols skew toward already having proper multisig/timelock hygiene. Badly-secured ones tend to get hacked and drop out of the rankings, the way Wasabi itself did. Real risk concentrates disproportionately in smaller, newer, lower-TVL protocols, exactly where Aurus and Smilee's gBERA were found. cVault Finance is the exception that tests the rule: old, not small, and still exposed, because nobody ever came back to fix it after 2020.
+Larger, higher-TVL protocols skew toward already having proper multisig/timelock hygiene. Badly-secured ones tend to get hacked and drop out of the rankings, the way Wasabi itself did. Real risk concentrates disproportionately in smaller, newer, lower-TVL protocols, exactly where Aurus and Smilee's gBERA were found. cVault Finance is the exception that tests the rule: old, not small, and still exposed, because nobody ever came back to fix it after 2020. Sentora is a second, different kind of exception: very large and recent, with single-key roles, but boxed in by the vault contract's own timelocks rather than by a multisig.
 
 The second pass checked this claim rather than just repeating it: zero-audit protocols in the $50K-$700K range and the $150K-$5M range both turned up multiple bare-EOA and 1-of-N-Safe cases, while the same filter run against $5M-$20M protocols came back consistently clean. Three separate TVL bands, the same result each time. That isn't a coincidence from one lucky search.
 
@@ -198,9 +214,9 @@ This is independent research, not an audit or a security guarantee. Everything a
 
 ## Status
 
-Last verified: 2026-09-18.
+Last verified: 2026-09-19.
 
-Well over 70 protocols checked by hand: 13 confirmed live and pushed to a real dollar figure, or to a documented reason none is possible or none is reachable (DeFIL, whose collateral tokens have no live DEX pool anywhere; TokenWorks NFT Strategies, whose bare-EOA owner has real power but no principal within reach), plus 2 clean reference cases in the $20M-$100M band (Aegis YUSD and 3F, both clean at the root). The $5M-$20M TVL band has come back consistently clean three separate times now. The $20M-$100M band, one tier up, now has two data points, both clean, still too few to call a pattern; more of that band is still to check, so this isn't a finished survey.
+Around 80 protocols checked by hand: 16 confirmed live and pushed to a real dollar figure, or to a documented reason none is possible or none is reachable (DeFIL, whose collateral tokens have no live DEX pool anywhere; TokenWorks NFT Strategies, whose bare-EOA owner has real power but no principal within reach), plus 2 clean reference cases in the $20M-$100M band (Aegis YUSD and 3F, both clean at the root). The $5M-$20M TVL band has come back consistently clean three separate times now. The $20M-$100M band, one tier up, now has two data points, both clean, still too few to call a pattern; more of that band is still to check, so this isn't a finished survey.
 
 ## About
 
