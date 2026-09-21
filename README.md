@@ -6,7 +6,7 @@
 [![Check a contract: free tool](https://img.shields.io/badge/check%20a%20contract-free%20tool-orange)](https://realspap.github.io/tools/admin-key-checker.html)
 ![Follow](https://img.shields.io/badge/follow-%40RealSpap-000000?logo=x)
 
-**The headline finding:** across 70+ DeFi protocols checked on-chain, several risk repeating Wasabi Protocol's $5.9M loss: a bare EOA over $3.84M+ at cVault Finance/CORE, and $750K at Smilee Finance's gBERA behind 4 unthresholded admins.
+**The headline finding:** across 95+ DeFi protocols and vault owners checked on-chain, several risk repeating Wasabi Protocol's $5.9M loss: a bare EOA over $3.84M+ at cVault Finance/CORE, and $750K at Smilee Finance's gBERA behind 4 unthresholded admins.
 
 [Full findings below](#what-it-found-checked-by-hand) · [Live dashboard](https://dune.com/s_pap/defi-admin-key-risk) · [Contact for licensing / custom research](https://x.com/RealSpap)
 
@@ -39,10 +39,34 @@ Severity is not a code-bug scale, so the usual Critical/High/Medium/Low vocabula
 | Sentora (Morpho PYUSD and RLUSD vaults) | 1-of-1 Safe (owner and curator) | ~$814.7M deposited, not directly drainable (3-day timelock, withdrawals cannot be gated) | Medium |
 | UltraYield (Morpho vaults) | 1-of-N Safe (1 of 5) | ~$240K | Medium |
 | K3 Capital (Morpho vault) | 1-of-N Safe (1 of 3) | ~$0 (empty vault) | Low |
+| frobUSDC (Morpho vault, Arbitrum) | 1-of-1 Safe | ~$1.1M deposited, not instantly drainable (24-hour timelock, live guardian) | Medium |
+| Duplicated Key (Morpho vault) | Bare EOA, also its own guardian and curator, zero timelock | ~$1.26M of third-party assets, currently frozen at 100% market utilisation | Medium |
+| 1337 USDC (Morpho vault) | Bare EOA, zero timelock, no guardian, no curator | No dollar figure (the vault's stated $175.7M is accrued interest on a frozen sdeUSD claim, see below) | Low |
+| Not Gauntlet (Morpho vault, Arbitrum) | Bare EOA, zero timelock, no guardian | No dollar figure (owner holds 99.73% of the shares, and the position is frozen) | Low |
+| Clearstar and 3Jane (15 Morpho vaults, 2 chains) | Bare EOA owner on Ethereum and Base at once | ~$6.3M stated, bounded by a 72-hour timelock and a separate guardian on every vault | Low |
 
-By severity: 2 Critical, 4 High, 5 Medium, 5 Low, across the 16 cases above. cVault Finance/CORE and Fake World Assets currently share the top spot: both Critical, both under documented active targeting right now, not just theoretically exposed.
+By severity: 2 Critical, 4 High, 7 Medium, 8 Low, across the 21 cases above. cVault Finance/CORE and Fake World Assets currently share the top spot: both Critical, both under documented active targeting right now, not just theoretically exposed.
 
 A few of these severity calls (Aurus, cVault Finance/CORE and FWA, DELTA LSW and JayPeggers, APY Finance) are not obvious from the number alone; see each case's own section below for the reasoning.
+
+### The number that isn't there: 1337 USDC
+
+Added 2026-09-21. On the governance surface alone this is the weakest configuration in the whole survey: a Morpho vault owned by a bare, active EOA, with `timelock()` at zero, no guardian and no curator. Nothing on the contract delays that key, because with a zero timelock MetaMorpho's `submitCap` sets a market cap immediately instead of queuing it, and `setIsAllocator` is owner-only and instant. The vault's `totalAssets()` reads 175,710,955 USDC, and the owner holds none of the shares, so the obvious write-up is "$175.7M of other people's money behind one key."
+
+That write-up would be wrong, and this section exists because the check that catches it is the whole point of this repository.
+
+Walking the vault's own `withdrawQueue` market by market shows its entire position sitting in a single market collateralised by sdeUSD, Elixir's staked deUSD. That market's `totalSupplyAssets` and `totalBorrowAssets` are exactly equal: 100% utilisation, nothing withdrawable. A market frozen at full utilisation keeps accruing interest on both sides, which inflates the accounting value of a claim nobody can realise. Morpho's own front end shows the matching symptom on this vault, a net APY above 1000% and a 30-day average around 271,673%, and the curator has filed no risk disclosure.
+
+So the defect is real and the number is not. This repository asserts no dollar figure for this case, and the same test knocked down "Not Gauntlet" on Arbitrum the same day, where the stated $6.5M is frozen xUSD exposure and the owner holds 99.73% of the shares anyway.
+
+| | |
+|---|---|
+| **Vault** | `0x94643e86aa5E38DDAc6c7791C1297f4E40cD96c1` (Ethereum) |
+| **Owner** | a bare EOA, `eth_getCode` empty on two independent endpoints, nonce 422 |
+| **Delay and vetoes** | `timelock()` 0, `guardian()` zero address, `curator()` zero address |
+| **Stated assets** | 175,710,955.16 USDC, identical on both endpoints |
+| **What that number actually is** | one position in an sdeUSD market at 100% utilisation, so accrued interest on a claim that cannot be withdrawn |
+| **Figure asserted here** | none |
 
 ## What happened
 
