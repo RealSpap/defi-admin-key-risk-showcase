@@ -1,8 +1,8 @@
 name: Auto Release
 
+# Releases are created by hand only (Actions > Auto Release > Run workflow),
+# so two pushes on the same day never produce two releases with one title.
 on:
-  push:
-    branches: [main]
   workflow_dispatch: {}
 
 permissions:
@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           fetch-depth: 2
 
@@ -22,30 +22,14 @@ jobs:
         run: |
           SUBJECT="$(git log -1 --format=%s)"
           AUTHOR_EMAIL="$(git log -1 --format=%ae)"
-          echo "Commit subject: $SUBJECT"
-          echo "Author email: $AUTHOR_EMAIL"
           SKIP=false
 
-          # This repo now has its own badge-sync bot (scripts/sync_badges.py,
-          # driven by .github/workflows/update_badges.yml), matching the
-          # pattern already used by sibling repos in this research program.
-          # The two checks below keep that bot's own automated commits
-          # (author email badge-sync-bot@users.noreply.github.com, subject
-          # "chore: sync badge data with README ...") from triggering a
-          # duplicate GitHub Release for a change that carries no research
-          # content of its own.
+          # Badge-sync commits (scripts/sync_badges.py, run by
+          # update_badges.yml) carry no research content: no release.
           if [ "$AUTHOR_EMAIL" = "badge-sync-bot@users.noreply.github.com" ]; then
             SKIP=true
           fi
-          if printf '%s' "$SUBJECT" | grep -Eqi '^chore: sync badge data with README'; then
-            SKIP=true
-          fi
-
-          # Other bot/state-only commit shapes, matching conventional
-          # commit prefixes used by automated maintenance bots across
-          # this research pipeline (e.g. "chore(monitor): update bot
-          # state").
-          if printf '%s' "$SUBJECT" | grep -Eqi '^(chore|ci|bot|build)(\([^)]*\))?:.*(badge|sync|monitor|signer|heartbeat|state|status)'; then
+          if printf '%s' "$SUBJECT" | grep -Eqi '^(chore|ci|bot|build)(\([^)]*\))?:'; then
             SKIP=true
           fi
 
@@ -63,24 +47,12 @@ jobs:
           SHORT_SHA="$(git rev-parse --short HEAD)"
           DATE_UTC="$(date -u +%Y-%m-%d)"
           TAG="pass-${DATE_UTC}-${SHORT_SHA}"
-          TITLE="$(git log -1 --format=%s)"
+          TITLE="Research update ${DATE_UTC}"
 
+          # Neutral notes: the findings themselves live in README.md.
           BODY_FILE="${RUNNER_TEMP}/release_body.txt"
-          git log -1 --format=%b > "$BODY_FILE"
-
-          # Drop attribution trailers, they aren't reader-facing release
-          # content.
-          sed -i '/^Co-Authored-By:/d' "$BODY_FILE"
-
-          # Trim leading and trailing blank lines left behind.
-          sed -i '/./,$!d' "$BODY_FILE"
-          sed -i -e :a -e '/^\n*$/{$d;N;};/\n$/ba' "$BODY_FILE"
-
-          # Some commits (small doc tweaks) have no body at all; fall back
-          # to the subject line so the release never ships an empty body.
-          if ! grep -q '[^[:space:]]' "$BODY_FILE"; then
-            printf '%s\n' "$TITLE" > "$BODY_FILE"
-          fi
+          printf 'Findings updated on %s. See README.md at commit %s.\n' \
+            "$DATE_UTC" "$SHORT_SHA" > "$BODY_FILE"
 
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"
           echo "title=$TITLE" >> "$GITHUB_OUTPUT"

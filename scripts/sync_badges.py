@@ -3,15 +3,15 @@
 Sync badge-data-cases-found.json against the headline case count README.md
 itself actually states, so the shields.io badge never silently goes stale.
 
-Deterministic, no LLM, no external API. Pure text parsing + JSON rewrite
+Deterministic, no external API. Pure text parsing + JSON rewrite
 + optional git commit/push.
 
 Source of truth in README.md:
   - Headline case count: the "By severity: N Critical, N High, N Medium,
-    N Low, across the N cases above" sentence in the At a glance section
-    — the same total the severity table itself is built from, so this
-    badge and the README never end up citing two unreconciled counts for
-    "the" number of confirmed cases.
+    N Low, across the N cases above" sentence in the At a glance section,
+    the same total the severity table itself is built from. Every other
+    "across the N cases" sentence (the Status section) must give the same N,
+    otherwise the script fails, so the README never cites two counts.
 
 Usage:
   python3 sync_badges.py [--repo-root PATH] [--no-commit] [--no-push] [--dry-run]
@@ -45,13 +45,17 @@ class ParsedCounts(NamedTuple):
 
 
 def parse_readme(readme_text: str) -> ParsedCounts:
-    match = HEADLINE_PATTERN.search(readme_text)
-    if not match:
+    counts = HEADLINE_PATTERN.findall(readme_text)
+    if not counts:
         raise ValueError(
             "Could not find the 'across N cases' headline sentence in "
             "README.md"
         )
-    return ParsedCounts(cases_found=match.group(1))
+    if len(set(counts)) > 1:
+        raise ValueError(
+            f"README.md gives different case counts: {sorted(set(counts))}"
+        )
+    return ParsedCounts(cases_found=counts[0])
 
 
 def load_badge_message(path: Path) -> str:
