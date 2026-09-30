@@ -2,7 +2,7 @@
 
 ![License](https://img.shields.io/badge/license-all%20rights%20reserved-blue)
 ![Status](https://img.shields.io/badge/status-active%20research-brightgreen)
-![Cases found](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FRealSpap%2Fdefi-admin-key-risk-showcase%2Fmain%2Fbadge-data-cases-found.json)
+![Cases found](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FRealSpap%2Fdefi-admin-key-risk-showcase%2Fmain%2Fbadge-data-cases-found.json&cachebust=20260930)
 [![Check a contract: free tool](https://img.shields.io/badge/check%20a%20contract-free%20tool-orange)](https://realspap.github.io/tools/admin-key-checker.html)
 ![Follow](https://img.shields.io/badge/follow-%40RealSpap-000000?logo=x)
 
