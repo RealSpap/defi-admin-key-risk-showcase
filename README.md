@@ -25,7 +25,7 @@ Severity is not a code-bug scale, so the usual Critical/High/Medium/Low vocabula
 |---|---|---|---|
 | Aurus (TXAU/TXAG/TXPT) | Bare EOA | ~$900K (real market cap) | High |
 | cVault Finance / CORE | Bare EOA | $3.84M+ | Critical |
-| Smilee Finance / gBERA | AccessControl, multi-holder, no threshold | ~$750K | High |
+| Smilee Finance / gBERA | AccessControl, 4 holders but only 2 effective keys, no threshold | ~$1.05M (was ~$750K on 2026-09-14, WBERA price up) | High |
 | DELTA LSW (cVault legacy) | Bare EOA (via wrapper contract) | ~$36K | Medium |
 | Fake World Assets / FWA | Bare EOA | No dollar figure (risk is future proceeds routing, not funds already parked; the contract itself holds ~$160) | Critical |
 | TokenWorks NFT Strategies (same key as FWA) | Bare EOA | No dollar figure (fee routing and transfer gating; the ~22 ETH and 37 CryptoPunks treasury is walled off by a restricted final-owner contract) | Medium |
@@ -44,8 +44,10 @@ Severity is not a code-bug scale, so the usual Critical/High/Medium/Low vocabula
 | 1337 USDC (Morpho vault) | Bare EOA, zero timelock, no guardian, no curator | No dollar figure (the vault's stated $175.7M is accrued interest on a frozen sdeUSD claim, see below) | Low |
 | Not Gauntlet (Morpho vault, Arbitrum) | Bare EOA, zero timelock, no guardian | No dollar figure (owner holds 99.73% of the shares, and the position is frozen) | Low |
 | Clearstar and 3Jane (15 Morpho vaults, 2 chains) | Bare EOA owner on Ethereum and Base at once | ~$6.3M stated, bounded by a 72-hour timelock and a separate guardian on every vault | Low |
+| Reservoir rUSD / srUSD | Bare EOA, sole admin, can grant itself minting | ~$852K on Ethereum (rUSD ~$230K, srUSD ~$622K), protocol TVL $72.1M across chains | High |
+| OpenEden USDO | Bare EOA on upgrade, admin and mint (regulated RWA issuer, likely by design, as with Superstate USTB) | ~$14.0M to $14.3M | High |
 
-By severity: 2 Critical, 4 High, 7 Medium, 8 Low, across the 21 cases above. cVault Finance/CORE and Fake World Assets currently share the top spot: both Critical, both under documented active targeting right now, not just theoretically exposed.
+By severity: 2 Critical, 6 High, 7 Medium, 8 Low, across the 23 cases above. cVault Finance/CORE and Fake World Assets currently share the top spot: both Critical, both under documented active targeting right now, not just theoretically exposed.
 
 A few of these severity calls (Aurus, cVault Finance/CORE and FWA, DELTA LSW and JayPeggers, APY Finance) are not obvious from the number alone; see each case's own section below for the reasoning.
 
