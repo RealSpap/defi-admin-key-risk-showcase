@@ -76,7 +76,7 @@ Compromised admin/deployer keys have overtaken smart-contract bugs as the #1 cau
 
 ## Access to the tool
 
-The verification method behind this research runs on demand, replayed fresh against any protocol you name, not published in this repository, so a case checked days or weeks ago can read differently today: admin keys get rotated, renounced, or compromised on-chain, not because the method has gone stale. Want to check one yourself right now, free? [Admin Key Checker](https://realspap.github.io/tools/admin-key-checker.html) classifies any contract's admin-key pattern live from chain, in your browser, no account needed. For the full method, dollar-figure decomposition, and a check against documented third-party targeting, reach out via [RealSpap on X](https://x.com/RealSpap) to have it checked live this week.
+The verification method behind this research runs on demand, replayed fresh against any protocol you name, not published in this repository, so a case checked days or weeks ago can read differently today: admin keys get rotated, renounced, or compromised on-chain, not because the method has gone stale. Want to check one yourself right now, free? [Admin Key Checker](https://realspap.github.io/tools/admin-key-checker.html) classifies any contract's admin-key pattern live from chain, in your browser, no account needed. For the full method, dollar-figure decomposition, and a check against documented third-party targeting, reach out via [Spap on X](https://x.com/RealSpap) to have it checked live this week.
 
 ## Disclaimer
 
@@ -244,7 +244,7 @@ Around 80 protocols checked by hand: 16 confirmed live and pushed to a real doll
 
 ## About
 
-[About this research program](https://realspap.github.io/methodology.html). Related work: [multisig-overlap](https://github.com/RealSpap/multisig-overlap-showcase) (343 protocols screened for shared multisig signers), [block-market-concentration](https://github.com/RealSpap/block-market-concentration-showcase) (who really builds and profits from Ethereum's blocks), and [onchain-postmortems](https://github.com/RealSpap/onchain-postmortems) (42 DeFi exploits independently reconstructed, ~$783.9M recomputed). Every pass across this program has found something real; none has come back empty.
+[About this research program](https://realspap.github.io/methodology.html). Related work: [multisig-overlap](https://github.com/RealSpap/multisig-overlap-showcase) (343 protocols screened for shared multisig signers), and [onchain-postmortems](https://github.com/RealSpap/onchain-postmortems) (51 DeFi exploits independently reconstructed, ~$798.5M recomputed). Every pass across this program has found something real; none has come back empty.
 
 ## License
 
