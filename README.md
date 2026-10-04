@@ -148,7 +148,7 @@ What the key cannot reach: PunkStrategy's own 21.97 ETH, or the Patch's 37 Crypt
 
 ### UwU Lend (fork of Aave, hacked once already)
 
-The UwU governance/reward token's `owner()` is a bare EOA tagged `sifu.eth`, publicly associated with the project's founder. The protocol lost roughly $19.4M in June 2024 to an oracle-manipulation exploit, a different vulnerability class than the one described here, already extensively covered by security firms at the time.
+The UwU governance/reward token's `owner()` is a bare EOA (Key A), a single key rather than a multisig. The key holder was checked against public on-chain labels; the named mapping is not published here. The protocol lost roughly $19.4M in June 2024 to an oracle-manipulation exploit, a different vulnerability class than the one described here, already extensively covered by security firms at the time.
 
 What's new: more than a year after that public hack, the same single EOA still holds `onlyOwner` access to `addMinter` / `addBurner` on the UwU token, unrestricted power to mint new UwU or burn anyone's balance. The token's own market value is small today, and now priced from two independent points rather than one: **$48,000 to $62,000** depending on source (CoinGecko's $0.00299935, a snapshot about 26 days old when checked, versus $0.003860 read directly off the UwU/WETH Sushiswap pool's live reserves, both against the confirmed 16,000,000 total supply). That pool itself holds only about $1,256 of real two-sided liquidity, so neither number is fully extractable at once, which isn't really the point. The governance of this protocol was never rebuilt after a $19M+ incident that made international crypto news.
 
