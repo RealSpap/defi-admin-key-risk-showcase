@@ -8,7 +8,7 @@
 
 **The headline finding:** 30 single-key admin cases (2 Critical, 13 High, 7 Medium, 8 Low) among 108 DeFi protocols and Morpho vault owners checked by hand on-chain. The pattern is the one behind Wasabi Protocol's $5.9M loss in April 2026: admin control held by one key, with no multisig threshold in front of it. Several cases are bounded by a timelock or a guardian, and each row says so.
 
-[Full findings below](#what-it-found-checked-by-hand) · [Contact for licensing / custom research](https://x.com/RealSpap)
+[Full findings below](#what-it-found-checked-by-hand) · [Sample authority sheets](#sample-authority-sheets) · [Contact for licensing / custom research](https://x.com/RealSpap)
 
 Independent, on-chain verified research into who really holds the upgrade/admin keys behind live DeFi protocols, anchored on a real 2026 incident, plus a check that finds the same pattern elsewhere. Findings and on-chain sources are always public; the verification method is available under license.
 
@@ -264,7 +264,7 @@ For ChickenSwap and MiniSwap, those same stale CoinGecko caches imply supply-wid
 
 ## What came back safe
 
-For contrast, and because most protocols checked were fine: RAAC, Compound V2, Cap (3-of-5 Safe behind a 24h Timelock, full chain traced), Frankencoin (fully immutable), Twyne, LandX Finance, Notional V2 (2-of-7 Safe), Threshold thUSD (48h Timelock), Inverse Finance Frontier (48h Timelock behind full governance), UniverseXYZ (DAO governance), Origin Dollar (48h Timelock), and cVault Finance's own DELTA Multisig (not counted separately, cVault is already a case). Also clean: TermMax (4-of-7 Safe holding its AccessManager's admin role), stake.link (24h Timelock, 6-of-8 Safe proposer/canceller), infiniFi (7-day timelock, 4-of-8 Safe proposer), Concentrator and CLever (6-of-9 Safe, no timelock), Vesper (3-of-6 Safe), AUTOfinance (three 6-of-N Safes), Harvest Finance (2-of-3 Safe, no timelock), and Treehouse tETH (checked 2026-09-30: the proxy and the vault are both owned by a timelock with a 5-day delay whose only proposer, canceller, executor and admin is a 5-of-7 Safe).
+For contrast, and because most protocols checked were fine: RAAC, Compound V2, Cap (3-of-5 Safe behind a 24h Timelock, full chain traced), Frankencoin (fully immutable), Twyne, LandX Finance, Notional V2 (proxy owned by a 3-of-7 Safe; the NOTE token by a separate 2-of-7 Safe; corrected 2026-10-05), Threshold thUSD (48h Timelock), Inverse Finance Frontier (48h Timelock behind full governance), UniverseXYZ (DAO governance), Origin Dollar (48h Timelock), and cVault Finance's own DELTA Multisig (not counted separately, cVault is already a case). Also clean: TermMax (4-of-7 Safe holding its AccessManager's admin role), stake.link (24h Timelock, 6-of-8 Safe proposer/canceller), infiniFi (7-day timelock, 4-of-8 Safe proposer), Concentrator and CLever (6-of-9 Safe, no timelock), Vesper (3-of-6 Safe), AUTOfinance (three 6-of-N Safes), Harvest Finance (2-of-3 Safe, no timelock), and Treehouse tETH (checked 2026-09-30: the proxy and the vault are both owned by a timelock with a 5-day delay whose only proposer, canceller, executor and admin is a 5-of-7 Safe).
 
 The second pass added many more: Easedefi.org (fully renounced), FIAT DAO (fully renounced), Yala, Bio Protocol, Asymmetry Finance, DeFi Franc, BOB Fusion, Metronome V1, Frax FPI, Lybra V2, Blur Lending and Resolv USR (each a genuine multi-signer Safe with a real threshold), Nsure Network and OPINION (3-of-5 Safes), Gro DAO (3-of-7), Goldfinch, mStable, and Puffer UniFi (renounced). Five of the largest Morpho vault curators were checked on 2026-09-19 as well, each on its biggest Ethereum vault: Gauntlet (4-of-7 owner, 3-of-7 curator, 7-day timelock), Steakhouse Financial (5-of-10 owner, 2-of-7 curator, 7-day timelock), RockawayX (4-of-8, 3-day timelock), Armitage by Wintermute (4-of-6 owner, 3-of-5 curator, 7-day timelock) and KPK (5-of-8 owner, 2-of-5 curator, 3-day timelock). Larger, more established names checked along the way, Compound V1, Uniswap V1, Augur, Keep3r Network, 1inch, GMX V1, NFTX, Gnosis Protocol v1, Synthetix V4, were consistently fine, reinforcing the pattern below rather than adding new findings.
 
@@ -307,6 +307,15 @@ This is independent research, not an audit or a security guarantee. Everything a
 Last research pass: 2026-09-30 (Reservoir rUSD and OpenEden USDO added, Treehouse tETH checked clean, Smilee gBERA re-checked). Cases were checked on different dates during September 2026, each section gives its date where it has one, and a key checked earlier can read differently today.
 
 108 entries (protocols and Morpho vault owner addresses) checked by hand, under the counting rule in [At a glance](#at-a-glance). By severity, across the 30 cases in the table: 2 Critical, 13 High, 7 Medium, 8 Low. Each case is pushed to a real dollar figure or to a documented reason none is possible or none is reachable (six cases, listed in the caveats). The $20M-$100M TVL band has two zero-audit data points, Aegis YUSD and 3F, both clean at the root; Reservoir (protocol TVL $72.1M across chains, found outside that filter) is rated High. Still too few to call a pattern, so this isn't a finished survey.
+
+## Sample authority sheets
+
+Two free samples of a per-protocol authority sheet: who can upgrade, pause or reconfigure each core contract, behind which delay and which multisig threshold, which signers sit on other protocols, and every on-chain read needed to reproduce it. Neither was commissioned.
+
+- [Notional Finance](authority-sheets/notional-finance.md) (lending, Ethereum)
+- [Hop Protocol](authority-sheets/hop-protocol.md) (bridge, Ethereum L1)
+
+A sheet for another protocol can be requested on [X](https://x.com/RealSpap).
 
 ## About
 
