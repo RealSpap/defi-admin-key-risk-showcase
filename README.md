@@ -1,6 +1,6 @@
 # DeFi Admin-Key Risk Scanner
 
-![License](https://img.shields.io/badge/license-all%20rights%20reserved-blue)
+![License: CC BY 4.0](https://img.shields.io/badge/license-CC%20BY%204.0-blue) ![Code: MIT](https://img.shields.io/badge/code-MIT-blue)
 ![Status](https://img.shields.io/badge/status-active%20research-brightgreen)
 ![Cases found](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FRealSpap%2Fdefi-admin-key-risk-showcase%2Fmain%2Fbadge-data-cases-found.json&cachebust=20260930)
 [![Check a contract: free tool](https://img.shields.io/badge/check%20a%20contract-free%20tool-orange)](https://realspap.github.io/tools/admin-key-checker.html)
@@ -8,9 +8,9 @@
 
 **The headline finding:** 30 single-key admin cases (2 Critical, 13 High, 7 Medium, 8 Low) among 108 DeFi protocols and Morpho vault owners checked by hand on-chain. The pattern is the one behind Wasabi Protocol's $5.9M loss in April 2026: admin control held by one key, with no multisig threshold in front of it. Several cases are bounded by a timelock or a guardian, and each row says so.
 
-[Full findings below](#what-it-found-checked-by-hand) · [Sample authority sheets](#sample-authority-sheets) · [Contact for licensing / custom research](https://x.com/RealSpap)
+[Full findings below](#what-it-found-checked-by-hand) · [Sample authority sheets](#sample-authority-sheets) · [Request a check of your protocol](https://x.com/RealSpap)
 
-Independent, on-chain verified research into who really holds the upgrade/admin keys behind live DeFi protocols, anchored on a real 2026 incident, plus a check that finds the same pattern elsewhere. Findings and on-chain sources are always public; the verification method is available under license.
+Independent, on-chain verified research into who really holds the upgrade/admin keys behind live DeFi protocols, anchored on a real 2026 incident, plus a check that finds the same pattern elsewhere. Findings and on-chain sources are always public, and free to reuse with credit ([CC BY 4.0](LICENSE)).
 
 ## At a glance
 
@@ -86,7 +86,7 @@ That is the whole reason admin keys matter: one key with upgrade or admin author
 
 ## Access to the tool
 
-Findings and on-chain sources are always public; the verification method is available under license. A case checked days or weeks ago can read differently today: admin keys get rotated, renounced, or compromised on-chain. Want to check one yourself right now, free? [Admin Key Checker](https://realspap.github.io/tools/admin-key-checker.html) classifies any contract's admin-key pattern live from chain, in your browser, no account needed. For a full check of a named protocol, with the dollar-figure decomposition and a look for documented hostile activity around the key, reach out via [Spap on X](https://x.com/RealSpap).
+Findings and on-chain sources are always public; the tooling that produces them is private. A case checked days or weeks ago can read differently today: admin keys get rotated, renounced, or compromised on-chain. Want to check one yourself right now, free? [Admin Key Checker](https://realspap.github.io/tools/admin-key-checker.html) classifies any contract's admin-key pattern live from chain, in your browser, no account needed. For a full check of a named protocol, with the dollar-figure decomposition and a look for documented hostile activity around the key, reach out via [Spap on X](https://x.com/RealSpap).
 
 ## Disclaimer
 
@@ -323,4 +323,4 @@ A sheet for another protocol can be requested on [X](https://x.com/RealSpap).
 
 ## License
 
-All rights reserved for the findings in this repository; the verification method is available under a separate commercial license. Full terms: [LICENSE](LICENSE).
+Findings, data, documentation and the sample authority sheets: [CC BY 4.0](LICENSE). Reuse them freely, including commercially, with credit to Spap and a link to this repository. Scripts and workflows (`scripts/`, `.github/`): [MIT](LICENSE-CODE). The private tooling that produces the findings is not part of this repository.
