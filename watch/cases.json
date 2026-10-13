@@ -1,0 +1,816 @@
+{
+ "about": "Every admin authority named in this README, as one on-chain read each, with what the README says it is (expect). Addresses come from the protocols' own documentation or repositories. Re-read daily by .github/workflows/watch.yml; the research and the private cases live in the private repository.",
+ "chains": {
+  "ethereum": {
+   "rpc": [
+    "https://ethereum-rpc.publicnode.com",
+    "https://eth.drpc.org",
+    "https://gateway.tenderly.co/public/mainnet"
+   ],
+   "explorer": "https://etherscan.io/address/"
+  },
+  "arbitrum": {
+   "rpc": [
+    "https://arb1.arbitrum.io/rpc",
+    "https://arbitrum.drpc.org"
+   ],
+   "explorer": "https://arbiscan.io/address/"
+  },
+  "base": {
+   "rpc": [
+    "https://mainnet.base.org",
+    "https://base.drpc.org"
+   ],
+   "explorer": "https://basescan.org/address/"
+  },
+  "berachain": {
+   "rpc": [
+    "https://rpc.berachain.com",
+    "https://berachain-rpc.publicnode.com"
+   ],
+   "explorer": "https://berascan.com/address/"
+  }
+ },
+ "cases": [
+  {
+   "id": "aurus",
+   "name": "Aurus TXAU / TXAG / TXPT",
+   "chain": "ethereum",
+   "severity": "High",
+   "published": true,
+   "checks": [
+    {
+     "what": "TXAU owner()",
+     "read": "owner",
+     "on": "0xe4a6f23fb9e00fca037aa0ea0a6954de0a6c53bf",
+     "expect": "eoa"
+    },
+    {
+     "what": "TXAG owner()",
+     "read": "owner",
+     "on": "0x34abce75d2f8f33940c721dca0f562617787bff3",
+     "expect": "eoa"
+    },
+    {
+     "what": "TXPT owner()",
+     "read": "owner",
+     "on": "0x19b22dbadc298c359a1d1b59e35f352a2b40e33c",
+     "expect": "eoa"
+    }
+   ]
+  },
+  {
+   "id": "cvault-core",
+   "name": "cVault Finance / CORE",
+   "chain": "ethereum",
+   "severity": "Critical",
+   "published": true,
+   "note": "addresses from the project's own README (github.com/cVault-finance/CORE-v1, Live Contracts), read live on 2026-10-10: all seven resolve owner() to the same bare EOA, as published",
+   "checks": [
+    {
+     "what": "CoreVault owner()",
+     "read": "owner",
+     "on": "0xC5cacb708425961594B63eC171f4df27a9c0d8c9",
+     "expect": "eoa"
+    },
+    {
+     "what": "CLEND owner()",
+     "read": "owner",
+     "on": "0x54B276C8a484eBF2a244D933AF5FFaf595ea58c5",
+     "expect": "eoa"
+    },
+    {
+     "what": "CoreDEX Treasury owner()",
+     "read": "owner",
+     "on": "0xe508a37101FCe81AB412626eE5F1A648244380de",
+     "expect": "eoa"
+    },
+    {
+     "what": "wCORE owner()",
+     "read": "owner",
+     "on": "0x17b8c1a92b66b1cf3092c5d223cb3a129023b669",
+     "expect": "eoa"
+    },
+    {
+     "what": "cBTC owner()",
+     "read": "owner",
+     "on": "0x7b5982dcab054c377517759d0d2a3a5d02615ab8",
+     "expect": "eoa"
+    },
+    {
+     "what": "coreDAI owner()",
+     "read": "owner",
+     "on": "0x00a66189143279b6db9b77294688f47959f37642",
+     "expect": "eoa"
+    },
+    {
+     "what": "FannyVault owner()",
+     "read": "owner",
+     "on": "0xbb791bc6106e4d949863e2ab76fc01ac0a9d7816",
+     "expect": "eoa"
+    },
+    {
+     "what": "Team Proxy Admin owner() (the proxies' upgrade admin)",
+     "read": "owner",
+     "on": "0x9cb1eeccd165090a4a091209e8c3a353954b1f0f",
+     "expect": "eoa"
+    },
+    {
+     "what": "CORE token owner()",
+     "read": "owner",
+     "on": "0x62359ed7505efc61ff1d56fef82158ccaffa23d7",
+     "expect": "eoa"
+    }
+   ]
+  },
+  {
+   "id": "smilee-gbera",
+   "name": "Smilee Finance / gBERA (GBeraAssetManager)",
+   "chain": "berachain",
+   "severity": "High",
+   "published": true,
+   "checks": [
+    {
+     "what": "DEFAULT_ADMIN_ROLE held by 0x2d6a4d5c",
+     "read": "has_role",
+     "on": "0x3F7755117f1FEC1981aEfB01887240DBF5F2eBcE",
+     "role": "0x0000000000000000000000000000000000000000000000000000000000000000",
+     "account": "0x2d6a4d5cac28e6eafb4a2d5720c40fe979fb4507",
+     "expect": "true"
+    },
+    {
+     "what": "DEFAULT_ADMIN_ROLE held by 0x1ec8ef2b",
+     "read": "has_role",
+     "on": "0x3F7755117f1FEC1981aEfB01887240DBF5F2eBcE",
+     "role": "0x0000000000000000000000000000000000000000000000000000000000000000",
+     "account": "0x1ec8ef2b1b090ce44824acfbcaeefcd220eae28d",
+     "expect": "true"
+    },
+    {
+     "what": "DEFAULT_ADMIN_ROLE held by 0x894602ac",
+     "read": "has_role",
+     "on": "0x3F7755117f1FEC1981aEfB01887240DBF5F2eBcE",
+     "role": "0x0000000000000000000000000000000000000000000000000000000000000000",
+     "account": "0x894602acd26221858c3e02570b036dcb73ac75e7",
+     "expect": "true"
+    },
+    {
+     "what": "DEFAULT_ADMIN_ROLE held by 0xdd98cf82",
+     "read": "has_role",
+     "on": "0x3F7755117f1FEC1981aEfB01887240DBF5F2eBcE",
+     "role": "0x0000000000000000000000000000000000000000000000000000000000000000",
+     "account": "0xdd98cf82c7dba2a41f9dee76193695aeebbfa122",
+     "expect": "true"
+    },
+    {
+     "what": "admin holder 1 is a bare EOA",
+     "read": "code",
+     "on": "0x2d6a4d5cac28e6eafb4a2d5720c40fe979fb4507",
+     "expect": "eoa"
+    },
+    {
+     "what": "admin holder 2 is a bare EOA",
+     "read": "code",
+     "on": "0x1ec8ef2b1b090ce44824acfbcaeefcd220eae28d",
+     "expect": "eoa"
+    },
+    {
+     "what": "admin holder 3, a 1-of-1 Safe",
+     "read": "safe",
+     "on": "0x894602acd26221858c3e02570b036dcb73ac75e7",
+     "expect": "safe:1"
+    },
+    {
+     "what": "admin holder 4, a 2-of-5 Safe",
+     "read": "safe",
+     "on": "0xdd98cf82c7dba2a41f9dee76193695aeebbfa122",
+     "expect": "safe:2"
+    }
+   ]
+  },
+  {
+   "id": "delta-lsw",
+   "name": "DELTA LSW (cVault legacy)",
+   "chain": "ethereum",
+   "severity": "Medium",
+   "published": true,
+   "note": "DELTA LSW address from cVault's own README; DELTA_FINANCIAL_MULTISIG() is a public constant getter (selector 74f2153e) that resolves to the Fixer contract, whose owner() is the cVault EOA, as published",
+   "checks": [
+    {
+     "what": "DELTA_FINANCIAL_MULTISIG(), the Fixer contract (not a Safe)",
+     "read": "getter",
+     "selector": "74f2153e",
+     "on": "0xdaFCE5670d3F67da9A3A44FE6bc36992e5E2beaB",
+     "expect": "contract"
+    },
+    {
+     "what": "Fixer owner()",
+     "read": "owner",
+     "on": "0x36e6b83bfb960f64218b82858ecd89a8351538fb",
+     "expect": "eoa"
+    }
+   ]
+  },
+  {
+   "id": "fwa",
+   "name": "Fake World Assets / FWA",
+   "chain": "ethereum",
+   "severity": "Critical",
+   "published": true,
+   "checks": [
+    {
+     "what": "owner()",
+     "read": "owner",
+     "on": "0xa0Df17B5aC76ABaBA36E1450E2cbCd18A620C845",
+     "expect": "eoa"
+    }
+   ]
+  },
+  {
+   "id": "tokenworks",
+   "name": "TokenWorks NFT Strategies",
+   "chain": "ethereum",
+   "severity": "High",
+   "published": true,
+   "checks": [
+    {
+     "what": "NFTStrategyFactory owner()",
+     "read": "owner",
+     "on": "0xA1a196b5BE89Be04a2c1dc71643689CE013c22e5",
+     "expect": "eoa"
+    },
+    {
+     "what": "PunkStrategyOwnerNFT owner()",
+     "read": "owner",
+     "on": "0x2f92293CF8D21F4dcb9eB8d82dd0b7A1f3aAd87E",
+     "expect": "eoa"
+    }
+   ]
+  },
+  {
+   "id": "uwu",
+   "name": "UwU Lend",
+   "chain": "ethereum",
+   "severity": "High",
+   "published": true,
+   "checks": [
+    {
+     "what": "UwU token owner()",
+     "read": "owner",
+     "on": "0x55C08ca52497e2f1534B59E2917BF524D4765257",
+     "expect": "eoa"
+    }
+   ]
+  },
+  {
+   "id": "jaypeggers",
+   "name": "JayPeggers",
+   "chain": "ethereum",
+   "severity": "Medium",
+   "published": true,
+   "checks": [
+    {
+     "what": "JAY token owner()",
+     "read": "owner",
+     "on": "0xDA7C0810cE6F8329786160bb3d1734cf6661CA6E",
+     "expect": "eoa"
+    }
+   ]
+  },
+  {
+   "id": "apy",
+   "name": "APY Finance",
+   "chain": "ethereum",
+   "severity": "High",
+   "published": true,
+   "checks": [
+    {
+     "what": "APY token owner(), a 1-of-6 Safe",
+     "read": "owner",
+     "on": "0x95a4492F028aa1fd432Ea71146b433E7B4446611",
+     "expect": "safe:1"
+    }
+   ]
+  },
+  {
+   "id": "defil",
+   "name": "DeFIL",
+   "chain": "ethereum",
+   "severity": "Low",
+   "published": true,
+   "checks": [
+    {
+     "what": "Unitroller admin()",
+     "read": "admin",
+     "on": "0x6B4F20B2259Eebb97945b6EF549a1c44FcA6Cd81",
+     "expect": "eoa"
+    }
+   ]
+  },
+  {
+   "id": "chickenswap",
+   "name": "ChickenSwap",
+   "chain": "ethereum",
+   "severity": "Low",
+   "published": true,
+   "checks": [
+    {
+     "what": "owner()",
+     "read": "owner",
+     "on": "0xE63684BcF2987892CEfB4caA79BD21b34e98A291",
+     "expect": "eoa"
+    }
+   ]
+  },
+  {
+   "id": "miniswap",
+   "name": "MiniSwap",
+   "chain": "ethereum",
+   "severity": "Low",
+   "published": true,
+   "checks": [
+    {
+     "what": "owner()",
+     "read": "owner",
+     "on": "0x4d953cf077c0c95ba090226e59a18fcf97db44ec",
+     "expect": "eoa"
+    }
+   ]
+  },
+  {
+   "id": "mars-poolin",
+   "name": "Mars Poolin",
+   "chain": "ethereum",
+   "severity": "Low",
+   "published": true,
+   "checks": [
+    {
+     "what": "owner()",
+     "read": "owner",
+     "on": "0x66C0DDEd8433c9EA86C8cf91237B14e10b4d70B7",
+     "expect": "eoa"
+    }
+   ]
+  },
+  {
+   "id": "sentora",
+   "name": "Sentora (Morpho PYUSD and RLUSD vaults)",
+   "chain": "ethereum",
+   "severity": "Medium",
+   "published": true,
+   "checks": [
+    {
+     "what": "Paypal USD Main owner(), a 1-of-1 Safe",
+     "read": "owner",
+     "on": "0xb576765fB15505433aF24FEe2c0325895C559FB2",
+     "expect": "safe:1"
+    },
+    {
+     "what": "Paypal USD Main curator(), a 1-of-1 Safe",
+     "read": "getter",
+     "selector": "e66f53b7",
+     "on": "0xb576765fB15505433aF24FEe2c0325895C559FB2",
+     "expect": "safe:1"
+    },
+    {
+     "what": "RLUSD Main owner(), a 1-of-1 Safe",
+     "read": "owner",
+     "on": "0x6dC58a0FdfC8D694e571DC59B9A52EEEa780E6bf",
+     "expect": "safe:1"
+    },
+    {
+     "what": "RLUSD Main curator(), a 1-of-1 Safe",
+     "read": "getter",
+     "selector": "e66f53b7",
+     "on": "0x6dC58a0FdfC8D694e571DC59B9A52EEEa780E6bf",
+     "expect": "safe:1"
+    }
+   ]
+  },
+  {
+   "id": "ultrayield",
+   "name": "UltraYield (Morpho vaults)",
+   "chain": "ethereum",
+   "severity": "Medium",
+   "published": true,
+   "checks": [
+    {
+     "what": "USDC Core owner(), a 1-of-5 Safe",
+     "read": "owner",
+     "on": "0x244f46262D9aD408B746E74aBdD010E9002fb7eE",
+     "expect": "safe:1"
+    },
+    {
+     "what": "USDT Core owner(), a 1-of-5 Safe",
+     "read": "owner",
+     "on": "0x85F3d81a39dF458E45d5EA20f9EB937fAafd282f",
+     "expect": "safe:1"
+    }
+   ]
+  },
+  {
+   "id": "k3-pendlend",
+   "name": "K3 Capital (Pendlend USDT, Morpho vault)",
+   "chain": "ethereum",
+   "severity": "Low",
+   "published": true,
+   "checks": [
+    {
+     "what": "vault owner(), a 1-of-3 Safe",
+     "read": "owner",
+     "on": "0x9646eBD6346C8C3a9f3d408f71C312eB0CbE8507",
+     "expect": "safe:1"
+    }
+   ]
+  },
+  {
+   "id": "frobusdc",
+   "name": "frobUSDC (Morpho vault, Arbitrum)",
+   "chain": "arbitrum",
+   "severity": "Medium",
+   "published": true,
+   "checks": [
+    {
+     "what": "vault owner(), a 1-of-1 Safe",
+     "read": "owner",
+     "on": "0xC3415c9231Dad88F8146107372143f6dAE042967",
+     "expect": "safe:1"
+    },
+    {
+     "what": "timelock()",
+     "read": "uint",
+     "selector": "d33219b4",
+     "on": "0xC3415c9231Dad88F8146107372143f6dAE042967",
+     "expect": "86400"
+    },
+    {
+     "what": "guardian(), the Safe's single owner",
+     "read": "getter",
+     "selector": "452a9320",
+     "on": "0xC3415c9231Dad88F8146107372143f6dAE042967",
+     "expect": "eoa"
+    }
+   ]
+  },
+  {
+   "id": "duplicated-key",
+   "name": "Duplicated Key (Morpho vault)",
+   "chain": "ethereum",
+   "severity": "Medium",
+   "published": true,
+   "checks": [
+    {
+     "what": "owner()",
+     "read": "owner",
+     "on": "0x0B6C8ef0DE1Be5ed1B59E6e7a67fB9442FB9E49C",
+     "expect": "eoa"
+    },
+    {
+     "what": "guardian()",
+     "read": "getter",
+     "selector": "452a9320",
+     "on": "0x0B6C8ef0DE1Be5ed1B59E6e7a67fB9442FB9E49C",
+     "expect": "eoa"
+    },
+    {
+     "what": "curator()",
+     "read": "getter",
+     "selector": "e66f53b7",
+     "on": "0x0B6C8ef0DE1Be5ed1B59E6e7a67fB9442FB9E49C",
+     "expect": "eoa"
+    },
+    {
+     "what": "timelock()",
+     "read": "uint",
+     "selector": "d33219b4",
+     "on": "0x0B6C8ef0DE1Be5ed1B59E6e7a67fB9442FB9E49C",
+     "expect": "0"
+    }
+   ]
+  },
+  {
+   "id": "1337-usdc",
+   "name": "1337 USDC (Morpho vault)",
+   "chain": "ethereum",
+   "severity": "Low",
+   "published": true,
+   "checks": [
+    {
+     "what": "owner()",
+     "read": "owner",
+     "on": "0x94643e86aa5E38DDAc6c7791C1297f4E40cD96c1",
+     "expect": "eoa"
+    },
+    {
+     "what": "timelock()",
+     "read": "uint",
+     "selector": "d33219b4",
+     "on": "0x94643e86aa5E38DDAc6c7791C1297f4E40cD96c1",
+     "expect": "0"
+    },
+    {
+     "what": "guardian()",
+     "read": "getter",
+     "selector": "452a9320",
+     "on": "0x94643e86aa5E38DDAc6c7791C1297f4E40cD96c1",
+     "expect": "zero"
+    }
+   ]
+  },
+  {
+   "id": "not-gauntlet",
+   "name": "Not Gauntlet (Morpho vault, Arbitrum)",
+   "chain": "arbitrum",
+   "severity": "Low",
+   "published": true,
+   "checks": [
+    {
+     "what": "owner()",
+     "read": "owner",
+     "on": "0x3014ED70B39be395e1a5Eb8ab4c4b8a5378E6522",
+     "expect": "eoa"
+    },
+    {
+     "what": "timelock()",
+     "read": "uint",
+     "selector": "d33219b4",
+     "on": "0x3014ED70B39be395e1a5Eb8ab4c4b8a5378E6522",
+     "expect": "0"
+    },
+    {
+     "what": "guardian()",
+     "read": "getter",
+     "selector": "452a9320",
+     "on": "0x3014ED70B39be395e1a5Eb8ab4c4b8a5378E6522",
+     "expect": "zero"
+    }
+   ]
+  },
+  {
+   "id": "clearstar-3jane-ethereum",
+   "name": "Clearstar and 3Jane vault owner (Ethereum)",
+   "chain": "ethereum",
+   "severity": "Low",
+   "published": true,
+   "checks": [
+    {
+     "what": "the owner key is a bare EOA",
+     "read": "code",
+     "on": "0x30988479c2e6a03e7fb65138b94762d41a733458",
+     "expect": "eoa"
+    }
+   ]
+  },
+  {
+   "id": "clearstar-3jane-base",
+   "name": "Clearstar and 3Jane vault owner (Base)",
+   "chain": "base",
+   "severity": "Low",
+   "published": true,
+   "checks": [
+    {
+     "what": "the same key, bare EOA on Base",
+     "read": "code",
+     "on": "0x30988479c2e6a03e7fb65138b94762d41a733458",
+     "expect": "eoa"
+    }
+   ]
+  },
+  {
+   "id": "reservoir",
+   "name": "Reservoir rUSD / srUSD",
+   "chain": "ethereum",
+   "severity": "High",
+   "published": true,
+   "checks": [
+    {
+     "what": "rUSD DEFAULT_ADMIN_ROLE held by the EOA",
+     "read": "has_role",
+     "on": "0x09D4214C03D01F49544C0448DBE3A27f768F2b34",
+     "role": "0x0000000000000000000000000000000000000000000000000000000000000000",
+     "account": "0xb7570e32dED63B25163369D5eb4D8e89E70e5602",
+     "expect": "true"
+    },
+    {
+     "what": "srUSD DEFAULT_ADMIN_ROLE held by the EOA",
+     "read": "has_role",
+     "on": "0x738d1115B90efa71AE468F1287fc864775e23a31",
+     "role": "0x0000000000000000000000000000000000000000000000000000000000000000",
+     "account": "0xb7570e32dED63B25163369D5eb4D8e89E70e5602",
+     "expect": "true"
+    },
+    {
+     "what": "the admin is a bare EOA",
+     "read": "code",
+     "on": "0xb7570e32dED63B25163369D5eb4D8e89E70e5602",
+     "expect": "eoa"
+    }
+   ]
+  },
+  {
+   "id": "openeden",
+   "name": "OpenEden USDO",
+   "chain": "ethereum",
+   "severity": "High",
+   "published": true,
+   "checks": [
+    {
+     "what": "USDO DEFAULT_ADMIN_ROLE held by the EOA",
+     "read": "has_role",
+     "on": "0x8238884Ec9668Ef77B90C6dfF4D1a9F4F4823BFe",
+     "role": "0x0000000000000000000000000000000000000000000000000000000000000000",
+     "account": "0x5EaFF7af80488033Bc845709806D5Fae5291eB88",
+     "expect": "true"
+    },
+    {
+     "what": "USDO UPGRADE_ROLE held by the EOA",
+     "read": "has_role",
+     "on": "0x8238884Ec9668Ef77B90C6dfF4D1a9F4F4823BFe",
+     "role": "0x88aa719609f728b0c5e7fb8dd3608d5c25d497efbb3b9dd64e9251ebba101508",
+     "account": "0x5EaFF7af80488033Bc845709806D5Fae5291eB88",
+     "expect": "true"
+    },
+    {
+     "what": "USDO Express DEFAULT_ADMIN_ROLE held by the EOA",
+     "read": "has_role",
+     "on": "0x80e49D1bdCE8F80c38E88Dd5C4c004dDb9B4E887",
+     "role": "0x0000000000000000000000000000000000000000000000000000000000000000",
+     "account": "0x5EaFF7af80488033Bc845709806D5Fae5291eB88",
+     "expect": "true"
+    },
+    {
+     "what": "the admin is a bare EOA",
+     "read": "code",
+     "on": "0x5EaFF7af80488033Bc845709806D5Fae5291eB88",
+     "expect": "eoa"
+    }
+   ]
+  },
+  {
+   "id": "agora-ausd",
+   "name": "Agora AUSD",
+   "chain": "ethereum",
+   "severity": "High",
+   "published": true,
+   "checks": [
+    {
+     "what": "EIP-1967 admin (a ProxyAdmin)",
+     "read": "eip1967_admin",
+     "on": "0x00000000eFE302BEAA2b3e6e1b18d08D69a9012a",
+     "expect": "contract"
+    },
+    {
+     "what": "ProxyAdmin owner()",
+     "read": "owner",
+     "on": "0xb8fcc66d613e5f54ee6a425ddbf4a2fdbe4dedee",
+     "expect": "eoa"
+    }
+   ]
+  },
+  {
+   "id": "socket-gateway",
+   "name": "Socket Gateway",
+   "chain": "ethereum",
+   "severity": "High",
+   "published": true,
+   "checks": [
+    {
+     "what": "owner()",
+     "read": "owner",
+     "on": "0x3a23F943181408EAC424116Af7b7790c94Cb97a5",
+     "expect": "eoa"
+    }
+   ]
+  },
+  {
+   "id": "kraken-kbtc",
+   "name": "Kraken kBTC",
+   "chain": "ethereum",
+   "severity": "High",
+   "published": true,
+   "checks": [
+    {
+     "what": "token owner()",
+     "read": "owner",
+     "on": "0x73E0C0d45E048D25Fc26Fa3159b0aA04BfA4Db98",
+     "expect": "eoa"
+    },
+    {
+     "what": "EIP-1967 admin (a ProxyAdmin)",
+     "read": "eip1967_admin",
+     "on": "0x73E0C0d45E048D25Fc26Fa3159b0aA04BfA4Db98",
+     "expect": "contract"
+    },
+    {
+     "what": "ProxyAdmin owner()",
+     "read": "owner",
+     "on": "0x836263ae83750cd981aa9594002cd045bea08173",
+     "expect": "eoa"
+    }
+   ]
+  },
+  {
+   "id": "coinbase-cbeth",
+   "name": "Coinbase cbETH",
+   "chain": "ethereum",
+   "severity": "High",
+   "published": true,
+   "checks": [
+    {
+     "what": "upgrade admin (Zeppelin slot)",
+     "read": "zeppelin_admin",
+     "on": "0xBe9895146f7AF43049ca1c1AE358B0541Ea49704",
+     "expect": "eoa"
+    },
+    {
+     "what": "owner()",
+     "read": "owner",
+     "on": "0xBe9895146f7AF43049ca1c1AE358B0541Ea49704",
+     "expect": "eoa"
+    },
+    {
+     "what": "masterMinter()",
+     "read": "getter",
+     "selector": "35d99f35",
+     "on": "0xBe9895146f7AF43049ca1c1AE358B0541Ea49704"
+    }
+   ]
+  },
+  {
+   "id": "coinbase-cbbtc",
+   "name": "Coinbase cbBTC",
+   "chain": "ethereum",
+   "severity": "High",
+   "published": true,
+   "checks": [
+    {
+     "what": "upgrade admin (Zeppelin slot)",
+     "read": "zeppelin_admin",
+     "on": "0xcbB7C0000aB88B473b1f5aFd9ef808440eed33Bf",
+     "expect": "eoa"
+    },
+    {
+     "what": "owner()",
+     "read": "owner",
+     "on": "0xcbB7C0000aB88B473b1f5aFd9ef808440eed33Bf",
+     "expect": "eoa"
+    },
+    {
+     "what": "masterMinter()",
+     "read": "getter",
+     "selector": "35d99f35",
+     "on": "0xcbB7C0000aB88B473b1f5aFd9ef808440eed33Bf"
+    }
+   ]
+  },
+  {
+   "id": "binance-wbeth",
+   "name": "Binance wBETH",
+   "chain": "ethereum",
+   "severity": "High",
+   "published": true,
+   "checks": [
+    {
+     "what": "upgrade admin (Zeppelin slot)",
+     "read": "zeppelin_admin",
+     "on": "0xa2E3356610840701BDf5611a53974510Ae27E2e1",
+     "expect": "eoa"
+    },
+    {
+     "what": "owner()",
+     "read": "owner",
+     "on": "0xa2E3356610840701BDf5611a53974510Ae27E2e1",
+     "expect": "eoa"
+    },
+    {
+     "what": "masterMinter()",
+     "read": "getter",
+     "selector": "35d99f35",
+     "on": "0xa2E3356610840701BDf5611a53974510Ae27E2e1",
+     "expect": "eoa"
+    }
+   ]
+  },
+  {
+   "id": "stakestone",
+   "name": "StakeStone STONE",
+   "chain": "ethereum",
+   "severity": "High",
+   "published": true,
+   "checks": [
+    {
+     "what": "STONE owner()",
+     "read": "owner",
+     "on": "0x7122985656e38BDC0302Db86685bb972b145bD3C",
+     "expect": "eoa"
+    },
+    {
+     "what": "StoneVault owner()",
+     "read": "owner",
+     "on": "0xA62F9C5af106FeEE069F38dE51098D9d81B90572",
+     "expect": "eoa"
+    }
+   ]
+  }
+ ]
+}
