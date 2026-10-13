@@ -3,8 +3,9 @@ name: Watch
 # Every day, re-read on-chain every admin key named in this README (watch/cases.json: the protocols' own contracts and
 # the key holders already named in the write-up) and record what moved under watch/. Read-only, standard library,
 # no key. A change opens an issue in the private research repository, where the case is re-verified before this
-# README is updated; without that token the alarm stays in this log. The research itself is not here: this is the
-# freshness check of what is published.
+# README is updated. Nothing about a move is published from here: the log and the commits stay neutral, the details go
+# only to the private issue, and without that token the run fails (red, nothing committed, so the alarm repeats the
+# next day instead of being lost). The research itself is not here: this is the freshness check of what is published.
 on:
   schedule:
     - cron: "23 7 * * *"
@@ -25,31 +26,41 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           persist-credentials: false
+      - name: Refuse any case that is not in the public write-up
+        run: |
+          python3 - <<'PY'
+          import json, sys
+          bad = [c["id"] for c in json.load(open("watch/cases.json"))["cases"] if c.get("published") is not True]
+          if bad: sys.exit("watch/cases.json holds cases not marked published: %s" % bad)
+          PY
       - name: Re-read every published authority and diff against the snapshot
         id: run
         run: |
           set +e
-          python3 scripts/watch_admin_keys.py --registry watch/cases.json --out watch --published-only | tee "$RUNNER_TEMP/run.log"
-          c=${PIPESTATUS[0]}; echo "code=$c" >> "$GITHUB_OUTPUT"
-          case "$c" in 0) echo "nothing moved";; 1) echo "::warning::a check was not read this run (RPC), see watch/drift.md";; 2) echo "::warning::a published authority moved";; 3) echo "::error::the registry contradicts the chain, no baseline written";; *) echo "::error::exit $c";; esac
+          python3 scripts/watch_admin_keys.py --registry watch/cases.json --out watch --published-only > "$RUNNER_TEMP/run.log" 2>&1
+          c=$?; echo "code=$c" >> "$GITHUB_OUTPUT"
+          # a public log: what moved is withheld (it goes to the private issue below); everything else is shown
+          grep -vE '^(MOVED|CONTRADICTS) ' "$RUNNER_TEMP/run.log"
+          case "$c" in 0) echo "nothing moved";; 1) echo "::warning::a check was not read this run (RPC)";; 2) echo "::warning::a published read moved, details withheld until it is re-verified";; 3) echo "::error::the registry contradicts the chain, details withheld";; *) echo "::error::exit $c";; esac
           exit 0
-      - name: Record the run
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        run: |
-          git add -A watch   # -A: on the first run drift.md does not exist, and git add refuses every path when one is missing
-          git diff --cached --quiet && { echo "state unchanged"; exit 0; }
-          git -c user.name=github-actions[bot] -c user.email=41898282+github-actions[bot]@users.noreply.github.com commit -qm "Watch $(date -u +%Y-%m-%d): ${{ steps.run.outputs.code == '2' && 'a published authority moved' || 'nothing moved' }} [skip ci]"
-          git -c http.https://github.com/.extraheader="AUTHORIZATION: basic $(printf x-access-token:%s "$GITHUB_TOKEN" | base64 | tr -d '\n')" push -q
-      - name: Alarm (an issue in the private repository, where the work happens; without ISSUES_TOKEN the alarm stays in this log)
+      - name: Alarm (an issue in the private repository; without ISSUES_TOKEN the run fails and commits nothing)
         if: steps.run.outputs.code == '2' || steps.run.outputs.code == '3'
         env:
           GH_TOKEN: ${{ secrets.ISSUES_TOKEN }}
           PRIVATE_REPO: RealSpap/defi-admin-key-risk
         run: |
-          [ -n "$GH_TOKEN" ] || { echo "::warning::alarm raised but no ISSUES_TOKEN secret: no issue opened (drift.md is printed below)"; cat watch/drift.md 2>/dev/null || grep CONTRADICTS "$RUNNER_TEMP/run.log"; exit 0; }
+          [ -n "$GH_TOKEN" ] || { echo "::error::alarm raised but no ISSUES_TOKEN secret: nothing committed, details withheld; the next run raises it again"; exit 1; }
           if [ "${{ steps.run.outputs.code }}" = 3 ]; then printf '## The public registry contradicts the chain\n\n```\n%s\n```\n' "$(grep CONTRADICTS "$RUNNER_TEMP/run.log")" > body.md; else cp watch/drift.md body.md; fi
           gh label create "admin key moved" --repo "$PRIVATE_REPO" --color B60205 --description "A recorded admin authority changed on-chain, or the registry contradicts the chain" 2>/dev/null || true
           N=$(gh issue list --repo "$PRIVATE_REPO" --label "admin key moved" --state open --json number -q '.[0].number' || true)
           if [ -n "$N" ]; then gh issue comment "$N" --repo "$PRIVATE_REPO" --body-file body.md
           else gh issue create --repo "$PRIVATE_REPO" --title "Admin key moved, seen from the showcase ($(date -u +%Y-%m-%d))" --label "admin key moved" --body-file body.md; fi
+      - name: Record the run (the details file never leaves the runner)
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          rm -f watch/drift.md body.md
+          git add -A watch   # -A: a path that does not exist must not make git add refuse the others
+          git diff --cached --quiet && { echo "state unchanged"; exit 0; }
+          git -c user.name=github-actions[bot] -c user.email=41898282+github-actions[bot]@users.noreply.github.com commit -qm "Watch $(date -u +%Y-%m-%d) [skip ci]"
+          git -c http.https://github.com/.extraheader="AUTHORIZATION: basic $(printf x-access-token:%s "$GITHUB_TOKEN" | base64 | tr -d '\n')" push -q
