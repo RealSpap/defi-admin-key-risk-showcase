@@ -64,8 +64,10 @@ class Rpc:
                     return d["result"]
                 except Exception as e:   # transport: one retry, then the next endpoint
                     last = "%s: %s" % (u, e); time.sleep(1.5)
-        if answered == len(self.urls) and reverts == answered:
-            raise Reverted("all endpoints reverted for %s: %s" % (method, last))
+        # A revert is the chain's own answer: if every endpoint that answered said "reverted" (and at least one did),
+        # an endpoint that is down or refuses eth_call does not change it. If no endpoint answered, it is a failure.
+        if reverts and reverts == answered:
+            raise Reverted("every endpoint that answered reverted for %s: %s" % (method, last))
         raise RuntimeError("all endpoints failed for %s: %s" % (method, last))
 
     def eth_call(self, to, data):
