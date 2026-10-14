@@ -230,7 +230,7 @@
    "id": "tokenworks",
    "name": "TokenWorks NFT Strategies",
    "chain": "ethereum",
-   "severity": "High",
+   "severity": "Medium",
    "published": true,
    "checks": [
     {
