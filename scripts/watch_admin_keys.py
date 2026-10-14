@@ -33,12 +33,22 @@ SLOT = {"eip1967_admin": "0xb53127684a568b3173ae13b9f8a6016e243e63b6e8ee1178d6a7
 UA = "Mozilla/5.0 (admin-key watch; github.com/RealSpap)"
 
 
+class Reverted(RuntimeError):
+    """Every endpoint answered, and the answer was "execution reverted": the contract says no. That is a result,
+    unlike a transport failure, which is no result at all."""
+
+
+def is_revert(err):
+    return err.get("code") == 3 or "revert" in str(err.get("message", "")).lower()
+
+
 class Rpc:
     def __init__(self, urls):
         self.urls, self.errors = urls, []
 
     def call(self, method, params):
         last = None
+        answered = reverts = 0
         for u in self.urls:
             body = json.dumps({"jsonrpc": "2.0", "id": 1, "method": method, "params": params}).encode()
             req = urllib.request.Request(u, body, {"Content-Type": "application/json", "User-Agent": UA})
@@ -47,10 +57,15 @@ class Rpc:
                     with urllib.request.urlopen(req, timeout=25) as r:
                         d = json.loads(r.read())
                     if "error" in d:
-                        last = "%s: %s" % (u, d["error"]); break   # a protocol error: try the next endpoint
+                        last = "%s: %s" % (u, d["error"])   # a protocol error: try the next endpoint
+                        answered += 1
+                        reverts += is_revert(d["error"])
+                        break
                     return d["result"]
                 except Exception as e:   # transport: one retry, then the next endpoint
                     last = "%s: %s" % (u, e); time.sleep(1.5)
+        if answered == len(self.urls) and reverts == answered:
+            raise Reverted("all endpoints reverted for %s: %s" % (method, last))
         raise RuntimeError("all endpoints failed for %s: %s" % (method, last))
 
     def eth_call(self, to, data):
@@ -76,7 +91,8 @@ def pad_addr(a):
 
 
 def classify(rpc, addr):
-    """What an address is: zero / eoa / safe (threshold, owners) / timelock (delay) / contract."""
+    """What an address is: zero / eoa / safe (threshold, owners) / timelock (delay) / contract.
+    A transport failure raises (the check is then "unread"); only a real revert means "not a Safe"."""
     if int(addr, 16) == 0:
         return {"kind": "zero"}
     if rpc.code_len(addr) == 0:
@@ -87,13 +103,13 @@ def classify(rpc, addr):
         n = int(raw[2 + 64:2 + 128], 16) if len(raw) >= 2 + 128 else 0
         if 0 < t <= 50 and n >= t:
             return {"kind": "safe", "threshold": t, "owners": n}
-    except Exception:
+    except (Reverted, ValueError):   # the contract answered "not a Safe"; a network failure is NOT caught here
         pass
     try:
         d = rpc.eth_call(addr, "0x" + SEL["getMinDelay"])
         if d and d != "0x":
             return {"kind": "timelock", "delay_seconds": int(d, 16)}
-    except Exception:
+    except (Reverted, ValueError):
         pass
     return {"kind": "contract"}
 
