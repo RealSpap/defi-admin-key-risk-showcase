@@ -1,5 +1,5 @@
 {
- "written_utc": "2026-10-16T07:57:16Z",
+ "written_utc": "2026-10-17T07:49:14Z",
  "results": {
   "aurus#0": {
    "address": "0x795b8dc0c4722061abbff6b780a7d76feb2219ba",
@@ -645,5 +645,6 @@
    "on": "0xA62F9C5af106FeEE069F38dE51098D9d81B90572",
    "read": "owner"
   }
- }
+ },
+ "previous_utc": "2026-10-16T07:57:16Z"
 }
