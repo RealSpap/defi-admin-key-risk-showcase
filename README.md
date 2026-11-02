@@ -86,7 +86,7 @@ That is the whole reason admin keys matter: one key with upgrade or admin author
 
 ## Access to the tool
 
-Findings and on-chain sources are always public; the tooling that produces them is private. A case checked days or weeks ago can read differently today: admin keys get rotated, renounced, or compromised on-chain. Want to check one yourself right now, free? [Admin Key Checker](https://realspap.github.io/tools/admin-key-checker.html) classifies any contract's admin-key pattern live from chain, in your browser, no account needed. For a full check of a named protocol, with the dollar-figure decomposition and a look for documented hostile activity around the key, reach out via [Spap on X](https://x.com/RealSpap).
+Findings and on-chain sources are always public; the tooling that produces them is private. A case checked days or weeks ago can read differently today: admin keys get rotated, renounced, or compromised on-chain. Want to check one yourself right now, free? [Admin Key Checker](https://realspap.github.io/tools/admin-key-checker.html) classifies any contract's admin-key pattern live from chain, in your browser, no account needed. For a full check of a named protocol, with the dollar-figure decomposition and a look for documented hostile activity around the key, reach out via [RealSpap on X](https://x.com/RealSpap).
 
 ## Disclaimer
 
@@ -325,4 +325,4 @@ A sheet for another protocol can be requested on [X](https://x.com/RealSpap).
 
 ## License
 
-Findings, data, documentation and the sample authority sheets: [CC BY 4.0](LICENSE). Reuse them freely, including commercially, with credit to Spap and a link to this repository. Scripts and workflows (`scripts/`, `.github/`): [MIT](LICENSE-CODE). The private tooling that produces the findings is not part of this repository.
+Findings, data, documentation and the sample authority sheets: [CC BY 4.0](LICENSE). Reuse them freely, including commercially, with credit to RealSpap and a link to this repository. Scripts and workflows (`scripts/`, `.github/`): [MIT](LICENSE-CODE). The private tooling that produces the findings is not part of this repository.
