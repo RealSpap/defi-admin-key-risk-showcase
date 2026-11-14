@@ -78,6 +78,19 @@ So the defect is real and the number is not. This repository asserts no dollar f
 | **What that number actually is** | one position in an sdeUSD market at 100% utilisation, so accrued interest on a claim that cannot be withdrawn |
 | **Figure asserted here** | none |
 
+## Check it yourself
+
+One command re-reads, on the chain, who holds each authority this README states: the 31 cases and 78 reads of `watch/cases.json` (the 30 cases of the table, with Clearstar and 3Jane counted once for each chain), on Ethereum mainnet (chain ID 1), Arbitrum One (chain ID 42161), Base (chain ID 8453) and Berachain (chain ID 80094). It needs no key, only public RPC endpoints and the Python standard library, and takes about 40 seconds:
+
+- `python3 scripts/watch_admin_keys.py --out "$(mktemp -d)"`
+
+My run, read at 07:00Z on 2026-11-14, read the heads Ethereum mainnet 26411588, Arbitrum One 524089473, Base 57246327 and Berachain 28812461, and printed these two last lines:
+
+- `Baseline written: 78 checks on 31 cases, 0 unread.`
+- `31 case(s), 78 check(s): 0 moved, 0 unread.`
+
+In a fresh folder, as above, the script writes a baseline only if no read contradicts what the registry says the README claims; otherwise it stops with exit code 3. The other exit codes are 0 (every read matched), 1 (a read failed: an RPC error is never counted as unchanged) and 2 (something moved against the previous snapshot of `watch/`). This shows that the type of each authority (a bare account, a Safe of t of n owners, a timelock delay) and its address are, at those heads, what the README says. It does not show amounts, intentions, or that a key held behind a Safe belongs to one person. The script never asks an endpoint for its chain ID: I asked each endpoint named in `watch/cases.json` on 2026-11-14, and the answer was 1 on all three Ethereum endpoints, 42161 on both Arbitrum endpoints, 8453 on both Base endpoints and 80094 on both Berachain endpoints.
+
 ## What happened
 
 On 2026-04-30, Wasabi Protocol lost ~$5.9M across Ethereum, Base, Berachain and Blast after an attacker compromised the private key of `wasabideployer.eth`. That single key held unchecked admin authority over every one of Wasabi's upgradeable vaults, with no multisig and no timelock. The protocol's own framework supported a timelock; it was just set to 0.
