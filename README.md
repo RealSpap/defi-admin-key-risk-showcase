@@ -37,7 +37,7 @@ A single-key admin setup is a governance fact read from public chain data, not a
 | ChickenSwap | Bare EOA, dormant | ~$150.57 (pool liquidity) | Low |
 | MiniSwap | Bare EOA, dormant | ~$277.41 (pool liquidity) | Low |
 | Mars Poolin | Bare EOA, dormant | ~$0.10 (pool liquidity) | Low |
-| Sentora (Morpho PYUSD and RLUSD vaults) | 1-of-1 Safe (owner and curator) | ~$814.7M deposited, not directly drainable (3-day timelock, withdrawals cannot be gated) | Medium |
+| Sentora (Morpho PYUSD and RLUSD vaults) | 1-of-1 Safe (owner and curator) | ~$743M deposited in the two vaults on 2026-11-14, not directly drainable (3-day timelock, withdrawals cannot be gated) | Medium |
 | UltraYield (Morpho vaults) | 1-of-N Safe (1 of 5) | ~$240K | Medium |
 | K3 Capital (Morpho vault) | 1-of-N Safe (1 of 3) | ~$0 (empty vault) | Low |
 | frobUSDC (Morpho vault, Arbitrum) | 1-of-1 Safe | ~$1.1M deposited, not instantly drainable (24-hour timelock, live guardian) | Medium |
@@ -183,9 +183,11 @@ This project's own methodology (above) names "1-of-N Safe: a real Gnosis Safe, b
 
 The point here is the pattern, not the amount, but the amount is real too. Re-checked on 2026-09-19: same six signers, same threshold of 1, same balance to the wei; only the token price has moved (the Safe's holding is now worth about $19,400).
 
-### Sentora: a 1-of-1 Safe at the $800M scale
+### Sentora: a 1-of-1 Safe at the $740M scale
 
-Sentora curates the two main Morpho vaults for PayPal's PYUSD and Ripple's RLUSD on Ethereum. Together they hold about **$814.7M** (441.19M PYUSD and 373.52M RLUSD read with `totalAssets()`, both priced at $0.9999 by DefiLlama and CoinGecko), from more than 200 depositors each.
+Sentora curates the two main Morpho vaults for PayPal's PYUSD and Ripple's RLUSD on Ethereum. Together they hold about **$743M**: `totalAssets()` of the two vaults, at block 26411564 on Ethereum mainnet (chain ID 1; block time 2026-11-14 06:55:35 UTC, hash `0x5bdef367125ed35810e55634fcc366d109ed1a83e63ff61fea90a64a0ddefd46`), the same on three public RPCs (read at 07:03Z): 356,463,000.56 PYUSD and 387,001,896.07 RLUSD, priced at $0.9995 and $1.0000 by DefiLlama (read at 06:59Z). That figure counts only these two vaults, as assets deposited in them. It is not the total of Sentora's other products or chains, and it is not a TVL taken from an aggregator. On 2026-09-19 the same two vaults held about $814.7M (441.19M PYUSD and 373.52M RLUSD), from more than 200 depositors each.
+
+Replay, on Ethereum mainnet (chain ID 1), PYUSD vault `0xb576765fB15505433aF24FEe2c0325895C559FB2`: `cast call 0xb576765fB15505433aF24FEe2c0325895C559FB2 "totalAssets()(uint256)" --block 26411564 --rpc-url RPC_URL` returns 356463000557142 (PYUSD has 6 decimals). On Ethereum mainnet (chain ID 1) too, RLUSD vault `0x6dC58a0FdfC8D694e571DC59B9A52EEEa780E6bf`: `cast call 0x6dC58a0FdfC8D694e571DC59B9A52EEEa780E6bf "totalAssets()(uint256)" --block 26411564 --rpc-url RPC_URL` returns 387001896074728555767779726 (RLUSD has 18 decimals). Replace `RPC_URL` with a public Ethereum mainnet node; reading a block this old needs a node that serves old state.
 
 | | |
 |---|---|
