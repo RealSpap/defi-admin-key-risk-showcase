@@ -79,6 +79,7 @@ def main() -> int:
     parser.add_argument("--no-commit", action="store_true")
     parser.add_argument("--no-push", action="store_true")
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--check", action="store_true", help="exit 3 when the badge differs from the README, write nothing")
     args = parser.parse_args()
 
     repo_root = Path(args.repo_root).resolve()
@@ -109,13 +110,17 @@ def main() -> int:
     if cases_found_current != cases_found_message:
         print(f"MISMATCH: {CASES_FOUND_BADGE} message "
               f"'{cases_found_current}' -> '{cases_found_message}'")
-        if not args.dry_run:
+        if not args.dry_run and not args.check:
             write_badge_message(cases_found_path, cases_found_message)
         changed_files.append(cases_found_path)
 
     if not changed_files:
         print("Badge already matches README.md. Nothing to do.")
         return 0
+
+    if args.check:
+        print("CHECK FAILED: the badge file does not follow the README. Run scripts/sync_badges.py --no-push before committing.")
+        return 3
 
     if args.dry_run:
         print("Dry run: not writing files or committing.")

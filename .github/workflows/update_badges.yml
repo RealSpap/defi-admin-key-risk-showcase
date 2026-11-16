@@ -1,4 +1,4 @@
-name: Update badge data from README
+name: Check badge data against the README
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
   workflow_dispatch: {}
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: update-badges-${{ github.ref }}
@@ -29,5 +29,5 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Sync badge data with README.md
-        run: python3 scripts/sync_badges.py --repo-root .
+      - name: Check that the badge file follows the README (the commit that changes the README carries the badge)
+        run: python3 scripts/sync_badges.py --repo-root . --check
