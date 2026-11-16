@@ -1,0 +1,17 @@
+{
+ "run_utc": "2026-11-16T17:11:20Z",
+ "baseline_established": false,
+ "chain_heads": {
+  "ethereum": 26428998,
+  "arbitrum": 524808832,
+  "base": 58293525,
+  "berachain": 28917181
+ },
+ "cases": 31,
+ "checks": 78,
+ "read": 78,
+ "unread": [],
+ "moved": 0,
+ "contradictions": [],
+ "note": "an unread check is a check not made this run, never an unchanged one"
+}
