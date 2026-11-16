@@ -23,7 +23,7 @@ for f in $FILES; do
 done
 git -C "$WORK" add $FILES
 if git -C "$WORK" diff --cached --quiet; then echo "watch-data: state unchanged"; exit 0; fi
-git -C "$WORK" -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -qm "Watch $(date -u +%Y-%m-%dT%H:%MZ)" || exit 1
+GIT_AUTHOR_NAME='github-actions[bot]' GIT_COMMITTER_NAME='github-actions[bot]' GIT_AUTHOR_EMAIL='41898282+github-actions[bot]@users.noreply.github.com' GIT_COMMITTER_EMAIL='41898282+github-actions[bot]@users.noreply.github.com' git -C "$WORK" commit -qm "Watch $(date -u +%Y-%m-%dT%H:%MZ)" || exit 1
 # a plain push: if the branch moved in between, the push is refused and the run is red; nothing is forced
 git ${AUTH[@]+"${AUTH[@]}"} -C "$WORK" push -q origin HEAD:refs/heads/watch-data || { echo "::error::push to watch-data refused (not a fast-forward?)"; exit 1; }
 echo "watch-data: updated"
