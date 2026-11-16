@@ -2,7 +2,7 @@
 """Compares the two state files of the Watch on main (watch/) and on the watch-data branch (mirror), byte for byte.
     python3 scripts/check_mirror.py [REMOTE]          REMOTE defaults to origin ; a local path works (tests)
 Exit 0 identical, 1 different, 3 the branch or a file is missing (never read as a pass). Reads with git, writes nothing.
-During the transition (14 days of double writing) a difference after a run is an alarm; the run that has just written both must give 0."""
+During the transition (both places are written, for at least 14 days) a difference after a run is an alarm; the run that has just written both must give 0."""
 import subprocess, sys, tempfile
 FILES = ["status.json", "snapshot.json"]
 

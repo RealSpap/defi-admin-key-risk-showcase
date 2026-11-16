@@ -1,6 +1,6 @@
 # Method, counting rule and what happened
 
-Every case below is described in [What it found, checked by hand](findings.md#what-it-found-checked-by-hand) (1337 USDC just below), with the contract addresses and on-chain reads it rests on. Defect types build on the categories defined in [Method](#method), with a short qualifier added where the case itself has one (a wrapper contract, a dormant key). Every dollar figure here is copied as-is from the case's own section; nothing here is a new calculation.
+Every case below is described in [What it found, checked by hand](findings.md#what-it-found-checked-by-hand) (the case about 1337 USDC is on top of [that file](findings.md)), with the contract addresses and on-chain reads it rests on. Defect types build on the categories defined in [Method](#method), with a short qualifier added where the case itself has one (a wrapper contract, a dormant key). Every dollar figure here is copied as-is from the case's own section; nothing here is a new calculation.
 
 **Counting rule.** A *checked* entry is a protocol, or for Morpho vaults one owner address, whose admin roles were read on-chain by hand and which is named in this README: 108 in total, 30 in the table below and 78 under [What came back safe](findings.md#what-came-back-safe). A *case* is one product or vault set under one admin key, so a team can appear twice (Fake World Assets and TokenWorks share one key; DELTA LSW, a cVault Finance product, is counted as its own case).
 

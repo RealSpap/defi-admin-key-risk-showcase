@@ -10,8 +10,11 @@ FILES="status.json snapshot.json"
 AUTH=()
 case "$REMOTE" in https://*) AUTH=(-c "http.https://github.com/.extraheader=AUTHORIZATION: basic $(printf x-access-token:%s "${GITHUB_TOKEN:?GITHUB_TOKEN is not set}" | base64 | tr -d '\n')");; esac
 
-if ! git ${AUTH[@]+"${AUTH[@]}"} ls-remote --exit-code --heads "$REMOTE" watch-data >/dev/null 2>&1; then
+rc=0; git ${AUTH[@]+"${AUTH[@]}"} ls-remote --exit-code --heads "$REMOTE" watch-data >/dev/null 2>&1 || rc=$?
+if [ "$rc" -eq 2 ]; then
   echo "::warning::the watch-data branch does not exist yet: the copy is skipped (create it with the seed commit first)"; exit 0
+elif [ "$rc" -ne 0 ]; then
+  echo "::error::cannot read the remote (git ls-remote exit code $rc): nothing copied"; exit 1
 fi
 git ${AUTH[@]+"${AUTH[@]}"} clone -q --depth 1 --branch watch-data "$REMOTE" "$WORK" || { echo "::error::cannot clone watch-data"; exit 1; }
 for f in $FILES; do

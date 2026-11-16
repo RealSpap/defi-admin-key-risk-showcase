@@ -68,7 +68,7 @@ jobs:
           git diff --cached --quiet && { echo "state unchanged"; exit 0; }
           git -c user.name=github-actions[bot] -c user.email=41898282+github-actions[bot]@users.noreply.github.com commit -qm "Watch $(date -u +%Y-%m-%d) [skip ci]"
           git -c http.https://github.com/.extraheader="AUTHORIZATION: basic $(printf x-access-token:%s "$GITHUB_TOKEN" | base64 | tr -d '\n')" push -q
-      - name: Check that main and watch-data hold the same state files (14 days of double writing, then main stops receiving them)
+      - name: Check that main and watch-data hold the same state files (during the transition both places are written; main stops receiving them only when I say so in writing)
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |

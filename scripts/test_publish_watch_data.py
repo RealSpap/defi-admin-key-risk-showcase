@@ -45,6 +45,10 @@ class Publish(unittest.TestCase):
         self.assertEqual(r.returncode, 0); self.assertIn("does not exist yet", r.stdout)
         self.assertNotIn("watch-data", git(remote, "branch").stdout)
 
+    def test_an_unreadable_remote_is_an_error_not_a_missing_branch(self):
+        r = publish(Path(tempfile.mkdtemp()) / "no-such-repository", "S1", "P1")
+        self.assertEqual(r.returncode, 1); self.assertIn("cannot read the remote", r.stdout)
+
     def test_changed_state_is_committed_by_the_bot_with_two_files_only(self):
         t, remote = make()
         r = publish(remote, "S1", "P1"); self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
