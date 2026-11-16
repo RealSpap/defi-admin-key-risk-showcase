@@ -55,6 +55,10 @@ jobs:
           N=$(gh issue list --repo "$PRIVATE_REPO" --label "admin key moved" --state open --json number -q '.[0].number' || true)
           if [ -n "$N" ]; then gh issue comment "$N" --repo "$PRIVATE_REPO" --body-file body.md
           else gh issue create --repo "$PRIVATE_REPO" --title "Admin key moved, seen from the showcase ($(date -u +%Y-%m-%d))" --label "admin key moved" --body-file body.md; fi
+      - name: Mirror the two state files to the watch-data branch (the branch is created by hand once; this step never creates it)
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: bash scripts/publish_watch_data.sh
       - name: Record the run (the details file never leaves the runner)
         env:
           GITHUB_TOKEN: ${{ github.token }}
@@ -64,3 +68,11 @@ jobs:
           git diff --cached --quiet && { echo "state unchanged"; exit 0; }
           git -c user.name=github-actions[bot] -c user.email=41898282+github-actions[bot]@users.noreply.github.com commit -qm "Watch $(date -u +%Y-%m-%d) [skip ci]"
           git -c http.https://github.com/.extraheader="AUTHORIZATION: basic $(printf x-access-token:%s "$GITHUB_TOKEN" | base64 | tr -d '\n')" push -q
+      - name: Check that main and watch-data hold the same state files (14 days of double writing, then main stops receiving them)
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          H="http.https://github.com/.extraheader=AUTHORIZATION: basic $(printf x-access-token:%s "$GITHUB_TOKEN" | base64 | tr -d '\n')"
+          git -c "$H" fetch -q --depth 1 origin main watch-data || echo "::warning::watch-data could not be fetched"
+          rc=0; python3 scripts/check_mirror.py || rc=$?
+          if [ "$rc" = 3 ]; then echo "::warning::the mirror could not be read (the watch-data branch does not exist yet?)"; elif [ "$rc" != 0 ]; then echo "::error::main and watch-data differ"; exit 1; fi
