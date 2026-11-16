@@ -1,0 +1,18 @@
+name: A read does not match
+description: The command of the README, or a manual read, gives a different result than the one published.
+title: "Read: "
+body:
+  - type: input
+    id: command
+    attributes:
+      label: The command you ran
+      description: The exact command, from the repository root.
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: What it printed
+      description: The last lines and the date you ran it. A moved authority is a finding, not an error.
+    validations:
+      required: true

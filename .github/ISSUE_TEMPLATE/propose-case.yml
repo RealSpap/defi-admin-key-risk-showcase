@@ -1,0 +1,18 @@
+name: Propose a case
+description: A live DeFi contract whose admin or upgrade power sits behind one key.
+title: "Case: "
+body:
+  - type: input
+    id: contract
+    attributes:
+      label: The contract and its network
+      description: The address, the network and the chain ID, as an explorer shows them.
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why one key
+      description: Who holds the role and how you read it; a call anyone can repeat.
+    validations:
+      required: true

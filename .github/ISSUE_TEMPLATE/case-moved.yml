@@ -1,0 +1,25 @@
+name: A case moved
+description: The authority of a published case changed on-chain since the date in the README.
+title: "Moved: "
+body:
+  - type: input
+    id: case
+    attributes:
+      label: The case
+      description: The row of the table, or the section of docs/findings.md.
+    validations:
+      required: true
+  - type: textarea
+    id: move
+    attributes:
+      label: What changed
+      description: The new owner or admin, the block where you read it, the network and the chain ID.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: How anyone can re-read it
+      description: The call you made, or a transaction hash. Never paste a private key or private data.
+    validations:
+      required: true
