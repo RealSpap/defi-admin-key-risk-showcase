@@ -1,11 +1,11 @@
 {
- "run_utc": "2026-11-17T16:57:25Z",
+ "run_utc": "2026-11-18T07:40:31Z",
  "baseline_established": false,
  "chain_heads": {
-  "ethereum": 26436104,
-  "arbitrum": 525092591,
-  "base": 58721351,
-  "berachain": 28959964
+  "ethereum": 26440506,
+  "arbitrum": 525263318,
+  "base": 58986280,
+  "berachain": 28986456
  },
  "cases": 31,
  "checks": 78,
