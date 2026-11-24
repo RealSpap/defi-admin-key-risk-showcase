@@ -10,7 +10,8 @@ name: Watch
 # state stays at the last run without a move, and the alarm repeats on each run until someone records the re-verified state by hand. The research itself is not here: this is the freshness check of what is published.
 on:
   schedule:
-    - cron: "23 7 * * *"
+    # GitHub started the scheduled runs of 17 to 23 November 8 to 12 hours after the time written here; the time is set 12 hours earlier so that a late start lands before the morning
+    - cron: "23 19 * * *"
   workflow_dispatch:
 
 permissions:
