@@ -1,6 +1,6 @@
 # Limits, disclaimer and status
 
-This research analyzes publicly available on-chain data specific to admin-key risk (smart contract code, multisig signer sets, governance transactions). None of the protocols named above were contacted prior to publication; every finding rests solely on that public on-chain data, not private communication. Full disclaimer and program-wide notes: [methodology](https://realspap.github.io/methodology.html).
+This research analyzes publicly available on-chain data specific to admin-key risk (smart contract code, multisig signer sets, governance transactions). None of the protocols named above were contacted prior to publication; every finding rests solely on that public on-chain data, not private communication. Full disclaimer and program-wide notes: [methodology](https://realspap.github.io/method.html#disclaimer).
 
 ## Caveats
 

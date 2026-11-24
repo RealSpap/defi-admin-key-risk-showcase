@@ -15,7 +15,7 @@ A sheet for another protocol can be requested on [X](https://x.com/RealSpap).
 
 ## About
 
-[About this research program](https://realspap.github.io/methodology.html). Related work: [multisig-overlap](https://github.com/RealSpap/multisig-overlap-showcase) (shared multisig signers across protocols) and [onchain-postmortems](https://github.com/RealSpap/onchain-postmortems) (DeFi exploits independently reconstructed).
+[About this research program](https://realspap.github.io/method.html#disclaimer). Related work: [multisig-overlap](https://github.com/RealSpap/multisig-overlap-showcase) (shared multisig signers across protocols) and [onchain-postmortems](https://github.com/RealSpap/onchain-postmortems) (DeFi exploits independently reconstructed).
 
 ## License
 
