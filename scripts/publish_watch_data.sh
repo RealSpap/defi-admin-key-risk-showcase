@@ -1,6 +1,7 @@
 #!/bin/bash
 # Copies the two state files of the Watch (watch/status.json, watch/snapshot.json) to the watch-data branch, as github-actions[bot].
 # The branch is created by hand once (a seed commit) and only ever grows: this script never creates it, never rewrites it, never forces.
+# Since 2026-11-24 the branch is the ONLY place the state lives (main receives no commit from the Watch): a missing branch is an error, not a skip.
 # Usage (in the Watch workflow, after the run): GITHUB_TOKEN=... bash scripts/publish_watch_data.sh
 # Tests: WATCH_REMOTE=<path of a local bare repository> (no token, no network).
 set -u
@@ -12,7 +13,7 @@ case "$REMOTE" in https://*) AUTH=(-c "http.https://github.com/.extraheader=AUTH
 
 rc=0; git ${AUTH[@]+"${AUTH[@]}"} ls-remote --exit-code --heads "$REMOTE" watch-data >/dev/null 2>&1 || rc=$?
 if [ "$rc" -eq 2 ]; then
-  echo "::warning::the watch-data branch does not exist yet: the copy is skipped (create it with the seed commit first)"; exit 0
+  echo "::error::the watch-data branch does not exist: main keeps no copy of the state, so nothing can be recorded; create the branch with a seed commit first"; exit 1
 elif [ "$rc" -ne 0 ]; then
   echo "::error::cannot read the remote (git ls-remote exit code $rc): nothing copied"; exit 1
 fi

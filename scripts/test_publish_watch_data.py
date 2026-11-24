@@ -1,9 +1,9 @@
-"""publish_watch_data.sh and check_mirror.py against local bare repositories : each rule has its planted fault."""
+"""publish_watch_data.sh against local bare repositories : each rule has its planted fault."""
 import os, shutil, subprocess, sys, tempfile, unittest
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-PUBLISH, MIRROR = HERE / "publish_watch_data.sh", HERE / "check_mirror.py"
+PUBLISH = HERE / "publish_watch_data.sh"
 G = ["-c", "user.name=t", "-c", "user.email=t@example.com"]
 
 
@@ -39,10 +39,10 @@ def publish(remote, status, snapshot, extra=None):
 
 
 class Publish(unittest.TestCase):
-    def test_missing_branch_is_skipped_not_created(self):
+    def test_missing_branch_is_an_error_and_is_not_created(self):
         t, remote = make(with_branch=False)
         r = publish(remote, "S1", "P1")
-        self.assertEqual(r.returncode, 0); self.assertIn("does not exist yet", r.stdout)
+        self.assertEqual(r.returncode, 1); self.assertIn("does not exist", r.stdout)
         self.assertNotIn("watch-data", git(remote, "branch").stdout)
 
     def test_an_unreadable_remote_is_an_error_not_a_missing_branch(self):
@@ -73,20 +73,6 @@ class Publish(unittest.TestCase):
         d = Path(tempfile.mkdtemp()); (d / "watch").mkdir(); (d / "watch" / "status.json").write_text("S1")
         r = subprocess.run(["bash", str(PUBLISH)], cwd=d, capture_output=True, text=True, env=dict(os.environ, WATCH_REMOTE=str(remote), RUNNER_TEMP=str(d)))
         self.assertEqual(r.returncode, 1)
-
-
-class Mirror(unittest.TestCase):
-    def test_same_files_give_0(self):
-        t, remote = make()
-        self.assertEqual(subprocess.run([sys.executable, str(MIRROR), str(remote)], capture_output=True).returncode, 0)
-
-    def test_a_difference_gives_1(self):
-        t, remote = make(); publish(remote, "S1", "P0")
-        self.assertEqual(subprocess.run([sys.executable, str(MIRROR), str(remote)], capture_output=True).returncode, 1)
-
-    def test_a_missing_branch_gives_3(self):
-        t, remote = make(with_branch=False)
-        self.assertEqual(subprocess.run([sys.executable, str(MIRROR), str(remote)], capture_output=True).returncode, 3)
 
 
 if __name__ == "__main__":

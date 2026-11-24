@@ -3,7 +3,7 @@
 
 The README states, case by case, who holds the upgrade or admin authority of a contract: a bare EOA, a 1-of-N Safe,
 a timelock with a given delay. Those are point-in-time reads. This script re-reads the same things from a public RPC,
-compares them with the previous run (watch/snapshot.json) and reports every change: the authority address moved, code
+compares them with the previous run (snapshot.json, read from the watch-data branch into watch/ before the run) and reports every change: the authority address moved, code
 appeared at an address that was a bare wallet, a Safe's threshold or owner count changed, a timelock's delay changed,
 a role was granted or revoked. Standard library only, read-only, no key.
 
