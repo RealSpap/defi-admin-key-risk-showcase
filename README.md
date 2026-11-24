@@ -1,5 +1,8 @@
 # DeFi Admin-Key Risk Scanner
 
+
+Which DeFi protocols let one key change or move things? This repository lists single-key admin cases checked by hand on-chain, each with its source, and `python3 scripts/watch_admin_keys.py --out "$(mktemp -d)"` re-reads the cited keys. It is not an audit.
+
 ![License: CC BY 4.0](https://img.shields.io/badge/license-CC%20BY%204.0-blue) ![Code: MIT](https://img.shields.io/badge/code-MIT-blue)
 ![Cases found](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FRealSpap%2Fdefi-admin-key-risk-showcase%2Fmain%2Fbadge-data-cases-found.json&cachebust=20260930)
 [![Check a contract: free tool](https://img.shields.io/badge/check%20a%20contract-free%20tool-orange)](https://realspap.github.io/tools/admin-key-checker.html)
