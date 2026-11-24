@@ -18,7 +18,7 @@ This is independent research, not an audit or a security guarantee. Everything a
 
 ## Status
 
-Last research pass: 2026-10-05 (issuer and bridge keys added 2026-10-01, Notional corrected 2026-10-05; before that, Reservoir rUSD and OpenEden USDO added, Treehouse tETH checked clean, Smilee gBERA re-checked on 2026-09-30). Cases were checked on different dates during September and October 2026, each section gives its date where it has one, and a key checked earlier can read differently today.
+Last pass by hand: 2026-10-05. Since then the table is re-read on-chain every day, and the date of the last re-read is in [`status.json` on the `watch-data` branch](https://github.com/RealSpap/defi-admin-key-risk-showcase/blob/watch-data/status.json). The pass of 2026-10-05 covered (issuer and bridge keys added 2026-10-01, Notional corrected 2026-10-05; before that, Reservoir rUSD and OpenEden USDO added, Treehouse tETH checked clean, Smilee gBERA re-checked on 2026-09-30). Cases were checked on different dates during September and October 2026, each section gives its date where it has one, and a key checked earlier can read differently today.
 
 108 entries (protocols and Morpho vault owner addresses) checked by hand, under the counting rule in [At a glance](../README.md#at-a-glance). By severity, across the 30 cases in the table: 2 Critical, 13 High, 7 Medium, 8 Low. Each case is pushed to a real dollar figure or to a documented reason none is possible or none is reachable (six cases, listed in the caveats). The $20M-$100M TVL band has two zero-audit data points, Aegis YUSD and 3F, both clean at the root; Reservoir (protocol TVL $72.1M across chains, found outside that filter) is rated High. Still too few to call a pattern, so this isn't a finished survey.
 
