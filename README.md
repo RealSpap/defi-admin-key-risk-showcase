@@ -18,7 +18,7 @@ Which DeFi protocols let one key change or move things? This repository lists si
 | Aurus (TXAU/TXAG/TXPT) | Bare EOA | ~$900K (real market cap) | High |
 | cVault Finance / CORE | Bare EOA | $3.84M+ | Critical |
 | Smilee Finance / gBERA | AccessControl, 4 holders but only 2 effective keys, no threshold | ~$1.05M (was ~$750K at the first check, WBERA price up) | High |
-| DELTA LSW (cVault legacy) | Bare EOA (via wrapper contract) | ~$36K | Medium |
+| DELTA LSW (cVault legacy) | Bare EOA, behind a modifier named `onlyMultisig` and a contract that are not a multisig (details in `docs/findings.md`) | ~$36K | Medium |
 | Fake World Assets / FWA | Bare EOA | No dollar figure (risk is future proceeds routing, not funds already parked; the contract itself holds ~$160) | Critical |
 | TokenWorks NFT Strategies (same key as FWA) | Bare EOA | No dollar figure (fee routing and transfer gating; the ~22 ETH and 37 CryptoPunks treasury is walled off by a restricted final-owner contract) | Medium |
 | UwU Lend | Bare EOA | $48,000 to $62,000 | High |
@@ -54,7 +54,7 @@ One command re-reads, on the chain, who holds each authority this README states:
 
 - `python3 scripts/watch_admin_keys.py --out "$(mktemp -d)"`
 
-My run, read at 07:00Z on 2026-11-14, read the heads Ethereum mainnet 26411588, Arbitrum One 524089473, Base 57246327 and Berachain 28812461, and printed these two last lines:
+The date and the chain heads of the last run of the Watch are in `status.json` on the `watch-data` branch, not typed here where they would age. In a fresh folder the script prints these two last lines:
 
 - `Baseline written: 78 checks on 31 cases, 0 unread.`
 - `31 case(s), 78 check(s): 0 moved, 0 unread.`
